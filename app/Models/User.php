@@ -48,5 +48,16 @@ class User extends Authenticatable
             'password' => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
         ];
+
     }
+
+    public function leaves()
+{
+    return $this->hasMany(Leave::class, 'user_id');
+}
+
+public function approvedLeaves()
+{
+    return $this->hasMany(Leave::class, 'approved_by');
+}
 }
