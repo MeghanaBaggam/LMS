@@ -22,7 +22,6 @@ return new class extends Migration
             $table->integer('leave_balance')->default(20);
             $table->rememberToken();
             $table->timestamps();
- 
             $table->foreign('manager_id')->references('id')->on('users')->onDelete('set null');
         });
 
