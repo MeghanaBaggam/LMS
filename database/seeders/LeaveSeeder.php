@@ -16,7 +16,7 @@ class LeaveSeeder extends Seeder
     public function run()
     {
         $employee=User::where('email','meghanabaggam@pal.tech')->first();
-        $manager=Iser::where('email','suresh@pal.tech')->first();
+        $manager=User::where('email','suresh@pal.tech')->first();
 
         if($employee && $manager){
              Leave::create([
