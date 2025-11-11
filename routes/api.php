@@ -18,8 +18,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('leaves/{leave}/approve', [LeaveController::class, 'approve'])->middleware('role:manager,hr');
     Route::post('leaves/{leave}/reject', [LeaveController::class, 'reject'])->middleware('role:manager,hr');
 });
-
+    
 // Restricted routes
-Route::middleware(['auth:sanctum', 'role:hr'])->group(function () {
+Route::middleware(['auth:sanctum', 'role:hr,manager'])->group(function () {
     Route::apiResource('employees', EmployeeController::class);
 });

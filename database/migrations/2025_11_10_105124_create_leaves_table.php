@@ -20,7 +20,6 @@ return new class extends Migration
          $table->text('reason')->nullable();
         $table->enum('status', ['pending','approved','rejected'])->default('pending');
         $table->foreignId('approved_by')->nullable()->constrained('users')->onDelete('set null');
-        $table->text('rejection_reason')->nullable();
         $table->integer('days')->default(1); // days requested
         $table->timestamps();
         });

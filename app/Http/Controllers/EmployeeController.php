@@ -23,7 +23,7 @@ class EmployeeController extends Controller
             'email'=>$req->email,
             'password'=>Hash::make($req->password),
             'role'=>$req->role,
-            'manager_id'=>$req->manager_id,
+            'manager_id'=>auth()->id(),
             'leave_balance'=>20,
         ]);
         return response()->json($user,201);

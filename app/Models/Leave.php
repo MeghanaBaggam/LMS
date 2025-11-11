@@ -10,8 +10,10 @@ class Leave extends Model
 {
     protected $fillable=[
         'user_id','start_date','end_date','type','reason','status','approved_by',
-        'rejected_reason','days'
+        'rejected_reason','days',
     ];
+     protected $table = 'leaves';
+         protected $primaryKey = 'id'; 
     //get the user who requested the leave
     public function user(): BelongsTo
     {
