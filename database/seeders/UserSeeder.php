@@ -23,8 +23,8 @@ class UserSeeder extends Seeder
         ]);
 
         $manager=User::create([
-             'name'=>'Santhosh',
-            'email'=>'santhosh@pal.tech',
+             'name'=>'Suresh',
+            'email'=>'suresh@pal.tech',
             'password'=>Hash::make('password'),
             'role'=>'manager',
             'leave_balance'=>20
