@@ -16,7 +16,7 @@ class LeaveController extends Controller
         $data=$req->validate([
             'start_date'=>'required|date',
             'end_date'=>'required|date|after_or_equal:start_date',
-            'type'=>'required|in:sick|vacation|casual',
+            'type'=>'required|in:sick,vacation,casual',
             'reason'=>'nullable|string|max:500',
         ]);
        $user=$req->user();
