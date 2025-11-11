@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Model\User;
+use App\Models\User;
 use Illuminate\Http\Request;
+use  Illuminate\Support\Facades\Hash;
 
 class EmployeeController extends Controller
 {
@@ -17,7 +18,7 @@ class EmployeeController extends Controller
             'role'=>'required|in:employee,manager,hr',
             'manager_id'=>'nullable|exists:users,id',
         ]);
-        $users=User::create([
+        $user=User::create([
             'name'=>$req->name,
             'email'=>$req->email,
             'password'=>Hash::make($req->password),
