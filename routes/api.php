@@ -12,10 +12,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('user-data', [AuthController::class, 'userData']);
     Route::apiResource('leaves', LeaveController::class);
-    Route::post('leaves/{leave}/approve',[LeaveController::class, 'approve']);
-    Route::post('leaves/{leave}/reject',[LeaveController::class, 'reject']);
 });
 //restricted
-Route::middleware(['auth:sanctum','can:isHR'])->group(function (){
+Route::middleware(['auth:sanctum','role:manager,hr'])->group(function (){
+Route::post('leaves/{leave}/approve',[LeaveController::class, 'approve']);
+    Route::post('leaves/{leave}/reject',[LeaveController::class, 'reject']);
+});
+ 
+//restricted
+Route::middleware(['auth:sanctum','role:hr'])->group(function (){
     Route::apiResource('employees',EmployeeController::class);
 });
