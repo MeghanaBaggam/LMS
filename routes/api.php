@@ -10,7 +10,7 @@ use App\Http\Controllers\EmployeeController;
 Route::post('user/login', [AuthController::class, 'login']);
 
 //  Protected routes
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth:api')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('user-data', [AuthController::class, 'userData']);
     Route::apiResource('leaves', LeaveController::class);
@@ -19,6 +19,6 @@ Route::middleware('auth:sanctum')->group(function () {
 });
     
 // Restricted routes
-Route::middleware(['auth:sanctum', 'role:hr,manager'])->group(function () {
+Route::middleware(['auth:api', 'role:hr,manager'])->group(function () {
     Route::apiResource('employees', EmployeeController::class);
 });
