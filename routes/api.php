@@ -14,14 +14,29 @@ Route::post('user/login', [AuthController::class, 'login']);
 Route::middleware('auth:api')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('user-data', [AuthController::class, 'userData']);
-    Route::apiResource('leaves', LeaveController::class);
-    Route::post('leaves/{leave}/approve', [LeaveController::class, 'approve'])->middleware('role:manager,hr');
-    Route::post('leaves/{leave}/reject', [LeaveController::class, 'reject'])->middleware('role:manager,hr');
-
-});
     
+    //employee actions
+    Route::middleware('role:employee')->group(function (){
+        Route::post('leaves',[LeaveController::class,'store']);
+        Route::get('leaves',[LeaveController::class,'index']);
+    });
 
-// Restricted routes
-Route::middleware(['auth:api', 'role:hr'])->group(function () {
-    Route::apiResource('employees', EmployeeController::class);
+    //manager actions
+    Route::middleware('role:manager')->group(function (){
+        Route::get('team/leaves',[LeaveController::class,'index']);
+        Route::post('leaves/{leaves}/approve',[LeaveController::class,'approve']);
+        Route::post('leaves/{leaves}/reject',[LeaveController::class,'reject']);
+    });
+    //HR actions
+    Route::middleware('role:hr')->group(function (){
+        Route::get('all/leaves',[LeaveController::class,'index']);
+        Route::apiResource('employees',EmployeeController::class);
+    });
+    //admin actions
+    Route::middleware('role:admin')->group(function (){
+        Route::get('roles',function (){
+            return \Spatie\Permission\Models\Role::all();
+        });
+    });
 });
+
