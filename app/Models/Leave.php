@@ -13,7 +13,7 @@ class Leave extends Model
         'rejected_reason','days',
     ];
      protected $table = 'leaves';
-         protected $primaryKey = 'id'; 
+     protected $primaryKey = 'id'; 
     //get the user who requested the leave
     public function user(): BelongsTo
     {

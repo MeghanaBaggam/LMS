@@ -17,10 +17,11 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('leaves', LeaveController::class);
     Route::post('leaves/{leave}/approve', [LeaveController::class, 'approve'])->middleware('role:manager,hr');
     Route::post('leaves/{leave}/reject', [LeaveController::class, 'reject'])->middleware('role:manager,hr');
+
 });
-    Route::middleware(['auth:api','role:manager'])->get('team/leaves', [LeaveController::class, 'teamLeaves']);
+    
 
 // Restricted routes
-Route::middleware(['auth:api', 'role:hr,manager'])->group(function () {
+Route::middleware(['auth:api', 'role:hr'])->group(function () {
     Route::apiResource('employees', EmployeeController::class);
 });

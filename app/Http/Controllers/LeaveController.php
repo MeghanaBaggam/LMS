@@ -110,24 +110,4 @@ class LeaveController extends Controller
 
         return response()->json($leave);
     }
-
-    // Manager: View team leaves 
-    public function teamLeaves(Request $req)
-    {
-        $user = $req->user();
-
-        if ($user->role !== 'manager') {
-            return response()->json(['message' => 'Forbidden'], 403);
-        }
-
-        $teamIds = $user->teamMembers()->pluck('id');
-        $leaves = Leave::whereIn('user_id', $teamIds)
-            ->with('user:id,name,email,role')
-            ->orderByDesc('created_at')
-            ->get();
-
-        return response()->json($leaves);
-    }
 }
-
-    
