@@ -5,32 +5,25 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\User;
 use  Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\Exceptions\JWTException;
 class AuthController extends Controller
 {
-    public function login(Request $req)
-    {
-        $req->validate([
-            'email'=>'required|email',
-            'password'=>'required',
-        ]);
-
-        $user=User::where('email',$req->email)->first();
-        if(!$user || !Hash::check($req->password,$user->password)){
-            throw ValidationException::withMessages([
-                'email'=>['the provided credentials are Incorrect']
-            ]);
-            
+    public function login(Request $req){
+    $crendetials=$req->only('email','password');
+    
+        try{
+            if(!$token=JWTAuth::attempt($crendetials)){
+                return response()->json(['error'=>'invalid Credentials'],401);
+            }
         }
-        //create session
-        auth()->login($user);
-        $token = $user->createToken('authToken')->plainTextToken;
-        return response()->json([
-            'user'=>$user,
-            'message'=>'Loggedin',
-            'token'=>$token,
-            
-        ]);
+          catch (JWTException $e) {
+        return response()->json(['error' => 'Could not create token'], 500);
+    }
+       return response()->json([
+        'token'=>$token,
+        'user'=>auth()->user()
+       ]);
     }
     public function logout(Request $req){
         auth()->logout();
