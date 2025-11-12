@@ -14,28 +14,33 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $hr=User::create([
-            'name'=>'Shyampal Reddy',
-            'email'=>'shyampalreddy@pal.tech',
+        $hr=User::firstOrCreate(
+            ['email'=>'shyampalreddy@pal.tech'],
+             ['name'=>'Shyampal Reddy',
             'password'=>Hash::make('password'),
-            'role'=>'hr',
             'leave_balance'=>20
-        ]);
+             ]
+        );
+        $hr->assignRole('hr');
 
-        $manager=User::create([
-             'name'=>'Suresh',
-            'email'=>'suresh@pal.tech',
+        $manager=User::FirstOrCreate(
+            ['email'=>'suresh@pal.tech'],
+            ['name'=>'Suresh',
             'password'=>Hash::make('password'),
             'role'=>'manager',
             'leave_balance'=>20
-        ]);
-        $emp=User::create([
-            'name'=>'Meghana Baggam',
-            'email'=>'meghanabaggam@pal.tech',
+            ]
+        );
+        $manager->assignRole('manager');
+        $employee=User::FirstOrCreate(
+           [ 'email'=>'meghanabaggam@pal.tech'],
+            ['name'=>'Meghana Baggam',
             'password'=>Hash::make('password'),
             'role'=>'employee',
             'manager_id'=>$manager->id,
             'leave_balance'=>20
-        ]);
+            ]
+        );
+        $employee->assignRole('employee');
     }
 }
