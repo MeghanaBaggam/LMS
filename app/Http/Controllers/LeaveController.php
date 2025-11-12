@@ -40,54 +40,94 @@ class LeaveController extends Controller
        ]);
        return response()->json($leave,201);
     }
-    //employee:view own leaves
-    public function index(Request $req){
-        $user=$req->user();
-        if($user->role==='hr'){
+    public function index(Request $req)
+    {
+        $user = $req->user();
+
+        if ($user->role === 'hr') {
             return Leave::with('user')->orderByDesc('created_at')->get();
         }
-        if($user->role==='manager'){//manager see all leaves
-            $teamIds=$user->teamMembers()->pluck('id');
-            return Leave::whereIn('user_id',$teamIds)->with('user')->orderByDesc('created_at')->get();
+
+        if ($user->role === 'manager') {
+            $teamIds = $user->teamMembers()->pluck('id');
+            return Leave::whereIn('user_id', $teamIds)
+                ->with('user')
+                ->orderByDesc('created_at')
+                ->get();
         }
-        //for normal employee
+
         return $user->leaves()->orderByDesc('created_at')->get();
     }
-        public function approve(Request $req,Leave $leave){
-            $user=$req->user();
-            if($user->role!=='manager' && $user->role!=='hr'){
-                return response()->json(['message'=>'Forbidden'],403);
-            }
-            if($user->role==='manager' && $leave->user->manager_id!==$user->id){
-                return response()->json(['message'=>'Not your team member'],403);
-            }
-            $employee=$leave->user;
-            if($employee->leave_balance<$leave->days){
-                return response()->json(['message'=>'Employee has insufficient balance'],422);
-            }
-            $leave->update([
-                'status'=>'approved',
-                'approved_by'=>$user->id
-            ]);
-             $employee->decrement('leave_balance',$leave->days);
-           return response()->json($leave);
-        }
-        public function reject(Request $req,Leave $leave){
-            $user=$req->user();
-            $req->validate(['rejected_reason'=>'required|string|max:500']);
-            if($user->role!=='manager' && $user->role!=='hr'){
-                return response()->json(['messages'=>'Forbidden'],403);
-            }
-            if($user->role==='manager' && $leave->user->manager_id!==$user->id){
-                return response()->json(['message'=>'Not your team member'],403);
-            }
-            $leave->update([
-                'status'=>'rejected',
-                'approved_by'=>$user->id,
-                'rejected_reason'=>$req->rejected_reason,
-            ]);
-            return response()->json($leave);
+
+    // Manager/HR: Approve leave
+    public function approve(Request $req, Leave $leave)
+    {
+        $user = $req->user();
+
+        if ($user->role !== 'manager' && $user->role !== 'hr') {
+            return response()->json(['message' => 'Forbidden'], 403);
         }
 
+        if ($user->role === 'manager' && $leave->user->manager_id !== $user->id) {
+            return response()->json(['message' => 'Not your team member'], 403);
+        }
+
+        $employee = $leave->user;
+
+        if ($employee->leave_balance < $leave->days) {
+            return response()->json(['message' => 'Employee has insufficient balance'], 422);
+        }
+
+        $leave->update([
+            'status' => 'approved',
+            'approved_by' => $user->id,
+        ]);
+
+        $employee->decrement('leave_balance', $leave->days);
+
+        return response()->json($leave);
     }
 
+    // Manager/HR: Reject leave
+    public function reject(Request $req, Leave $leave)
+    {
+        $req->validate(['rejection_reason' => 'required|string|max:500']);
+        $user = $req->user();
+
+        if ($user->role !== 'manager' && $user->role !== 'hr') {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+
+        if ($user->role === 'manager' && $leave->user->manager_id !== $user->id) {
+            return response()->json(['message' => 'Not your team member'], 403);
+        }
+
+        $leave->update([
+            'status' => 'rejected',
+            'approved_by' => $user->id,
+            'rejected_reason' => $req->rejected_reason,
+        ]);
+
+        return response()->json($leave);
+    }
+
+    // Manager: View team leaves 
+    public function teamLeaves(Request $req)
+    {
+        $user = $req->user();
+
+        if ($user->role !== 'manager') {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+
+        $teamIds = $user->teamMembers()->pluck('id');
+        $leaves = Leave::whereIn('user_id', $teamIds)
+            ->with('user:id,name,email,role')
+            ->orderByDesc('created_at')
+            ->get();
+
+        return response()->json($leaves);
+    }
+}
+
+    

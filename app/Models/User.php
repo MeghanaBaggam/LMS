@@ -6,7 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Tymon\JUTWuth\Contracts\JWTSubject;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -54,6 +54,16 @@ class User extends Authenticatable implements JWTSubject
         ];
 
     }
+    public function manager()
+{
+    return $this->belongsTo(User::class, 'manager_id');
+}
+
+public function teamMembers()
+{
+    return $this->hasMany(User::class, 'manager_id');
+}
+
 
 public function leaves()
 {
