@@ -9,7 +9,6 @@ use App\Http\Controllers\EmployeeController;
 // Public route
 Route::post('user/login', [AuthController::class, 'login']);
 
-
 //  Protected routes
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
