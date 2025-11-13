@@ -13,6 +13,7 @@ class LeaveController extends Controller
 {
     //employee apply
     public function store(Request $req){
+        $req->user()->can('apply-leave')||abort(403,'unauthorized');
         $data=$req->validate([
             'start_date'=>'required|date',
             'end_date'=>'required|date|after_or_equal:start_date',
@@ -44,11 +45,11 @@ class LeaveController extends Controller
     {
         $user = $req->user();
 
-        if ($user->role === 'hr') {
+        if ($user->hasRole('hr')) {
             return Leave::with('user')->orderByDesc('created_at')->get();
         }
 
-        if ($user->role === 'manager') {
+        if ($user->hasRole('manager')) {
             $teamIds = $user->teamMembers()->pluck('id');
             return Leave::whereIn('user_id', $teamIds)
                 ->with('user')
@@ -62,15 +63,8 @@ class LeaveController extends Controller
     // Manager/HR: Approve leave
     public function approve(Request $req, Leave $leave)
     {
-        $user = $req->user();
+     $req->user()->can('approve-leave')||abort(403,'unauthorized');
 
-        if ($user->role !== 'manager' && $user->role !== 'hr') {
-            return response()->json(['message' => 'Forbidden'], 403);
-        }
-
-        if ($user->role === 'manager' && $leave->user->manager_id !== $user->id) {
-            return response()->json(['message' => 'Not your team member'], 403);
-        }
 
         $employee = $leave->user;
 
@@ -91,16 +85,9 @@ class LeaveController extends Controller
     // Manager/HR: Reject leave
     public function reject(Request $req, Leave $leave)
     {
-        $req->validate(['rejection_reason' => 'required|string|max:500']);
+    $req->user()->can('reject-leave')||abort(403,'unauthorized');
+        $req->validate(['rejection_reason   ' => 'required|string|max:500']);
         $user = $req->user();
-
-        if ($user->role !== 'manager' && $user->role !== 'hr') {
-            return response()->json(['message' => 'Forbidden'], 403);
-        }
-
-        if ($user->role === 'manager' && $leave->user->manager_id !== $user->id) {
-            return response()->json(['message' => 'Not your team member'], 403);
-        }
 
         $leave->update([
             'status' => 'rejected',
@@ -110,4 +97,5 @@ class LeaveController extends Controller
 
         return response()->json($leave);
     }
+
 }
