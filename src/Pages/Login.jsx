@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import paltechLogo from '../Images/logo.jpg';
+import bg from '../Images/paltech.jpg';
 export const Login = () => {
     const [email,setEmail]=useState("");
     const [password,setPassword]=useState("");
@@ -52,7 +53,13 @@ export const Login = () => {
   return (
     
         <div className='split-screen'>
-      <div className='left'>
+      <div className='left'
+      style={{
+    backgroundImage: `url(${bg})`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat"
+  }}>
        
          <img src={paltechLogo} alt="Paltech Logo" className="logo"/>
           <h3>Employee Leave Management System</h3>
