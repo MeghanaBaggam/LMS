@@ -38,16 +38,7 @@ export const Login = () => {
         }
         
     };
-    const testCORS = async () => {
-  try {
-    const res = await axios.get("http://127.0.0.1:8000/api/user-data");
-    console.log("CORS Success:", res.data);
-    alert("CORS is working!");
-  } catch (err) {
-    console.log("CORS Error:", err);
-    alert("CORS FAILED! Check console.");
-  }
-};
+  
 
    
   return (
