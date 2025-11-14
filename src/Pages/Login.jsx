@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import paltechLogo from '../Images/logo.jpg';
 import bg from '../Images/paltech.jpg';
+
 export const Login = () => {
     const [email,setEmail]=useState("");
     const [password,setPassword]=useState("");
@@ -17,9 +18,11 @@ export const Login = () => {
             password,
           });
           const token=response.data.token;
+          const user=response.data.user;
           const role=response.data.user.role;
 
           localStorage.setItem("token",token);
+          localStorage.setItem("user",JSON.stringify(user));
           
           setMessage("Login Successful!!");
 
