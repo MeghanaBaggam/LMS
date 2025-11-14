@@ -12,8 +12,7 @@ export const HRDashboard = () => {
     const [password,setPassword]=useState("");
     const [role,setRole]=useState("");
     const [managerId,setManagerId]=useState("");
-
-    const [editId,setEditIt]=useState(null);
+     const [editId,setEditId]=useState(null);
 
     const token=localStorage.getItem("token");
     const fetchEmp=async ()=>{
@@ -52,7 +51,6 @@ useEffect(()=>{
             await axios.put(`http://127.0.0.1:8000/api/employees/${editId}`,{
                 name,
                 email,
-                password,
                 role,
                 manager_id:managerId
             },{
@@ -130,8 +128,15 @@ useEffect(()=>{
                                    <td>{emp.manager?.name||"-"}</td>
                                    <td>{emp.manager_id || "-"}</td>
                                    <td>
-                                    <button className='edit-btn' onClick={updateEmp}>Edit</button>
-                                    <button className='delete-btn' onClick={deleteEmp}>Delete</button>
+                                    <button className='edit-btn' onClick={()=>{
+                                        setShowEdit(true);
+                                        setEditId(emp.id);
+                                        setName(emp.name);
+                                        setEmail(emp.email);
+                                        setRole(emp.role);
+                                        setManagerId(emp.manager_id);
+                                    }}>Edit</button>
+                                    <button className='delete-btn' onClick={()=>deleteEmp(emp.id)}>Delete</button>
                                    </td>
                                    </tr>
                   ))
@@ -168,6 +173,40 @@ useEffect(()=>{
                         <button onClick={()=>setShowAdd(false)}>Cancel</button>
 
                      </div>
+                </div>
+            )
+        }
+
+        {
+            showEdit && (
+                <div className='model'>
+                     <div className='model-content'>
+                        <h3>Edit Employee</h3>
+
+                        <input value={name} onChange={(e)=>setName(e.target.value)}/>
+                        <input value={email} onChange={(e)=>setEmail(e.target.value)}/>
+
+
+                    <select value={role} onChange={(e)=>setRole(e.target.value)}>
+                        <option value="hr">HR</option>
+                        <option value="manager">Manager</option>
+                        <option value="employee">Employee</option>
+                    </select>
+
+                    <select value={managerId} onChange={(e)=>setManagerId(e.target.value)}>
+                        <option value="">Select Manager</option>
+                        {employees
+                        .filter(u=>u.role==="manager")
+                        .map(m=>(
+                            <option key={m.id} value={m.id}>{m.name}</option>
+                        ))
+                        }
+                    </select>
+
+                    <button onClick={updateEmp}>Update</button>
+                    <button onClick={()=>setShowEdit(false)}>Cancel</button>
+                     
+                </div>
                 </div>
             )
         }
