@@ -30,7 +30,7 @@ Route::middleware('auth:api')->group(function () {
     //HR actions
     Route::middleware(['role:hr'])->group(function (){
         Route::get('all/leaves',[LeaveController::class,'index']);
-        Route::apiResource('employees',EmployeeController::class);
+        Route::apiResource('users',EmployeeController::class);
     });
     //admin actions
     Route::middleware(['role:admin'])->group(function (){
