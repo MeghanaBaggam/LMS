@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState,useEffect } from 'react'
 import axios from 'axios'
+import { FaUserCircle } from "react-icons/fa";
 export const HRDashboard = () => {
     const [employees,setEmployees]=useState([]);
     const [search,setSearch]=useState("");
@@ -14,7 +15,16 @@ export const HRDashboard = () => {
     const [managerId,setManagerId]=useState("");
      const [editId,setEditId]=useState(null);
 
+     const [showMenu,setShowMenu]=useState(false);
+     const [showProfile,setShowProfile]=useState(false);
+
     const token=localStorage.getItem("token");
+
+    const user=JSON.parse(localStorage.getItem("user"));
+    const userInitials=user?.name
+    ? user.name.split(" ").map(n=>n[0].join(" ").toUpperCase):"U";
+
+
     const fetchEmp=async ()=>{
         try{
             const response=await axios.get("http://127.0.0.1:8000/api/users",{
@@ -79,9 +89,43 @@ useEffect(()=>{
             console.log("error",error);
         } 
     };
-    console.log("showAdd:", showAdd);
+   const logoutUser=()=>{
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    window.location.href="/";
+   }
   return (
     <div className='hr-container'>
+        {/* for profile section */}
+        <div className='user-section'>
+            <div className='user-avtar' onClick={()=>setShowMenu(!showMenu)}>
+               <FaUserCircle />
+            </div>
+
+        </div>
+        {
+            showMenu && (
+                <div className='dropdown-menu'>
+                    <p onClick={()=>setShowProfile(true)}>Profile</p>
+                    <p onClick={logoutUser}>Logout</p>
+                </div>
+            )
+        }
+        {
+            showProfile && (
+                <div className='model'>
+                    <div className='model-content'>
+                        <h3>User Profile</h3>
+                        <p><strong>ID:</strong>{user?.id}</p>
+                        <p><strong>Name:</strong>{user?.name}</p>
+                         <p><strong>Email:</strong> {user?.email}</p>
+                         <p><strong>Role:</strong> {user?.role}</p>
+                        <p><strong>Manager ID:</strong> {user?.manager_id || "-"}</p>
+                        <button onClick={()=>setShowProfile(false)}>Close</button>
+                        </div>
+                    </div>
+            )
+        }
         <h2 className='welcome-text'>Welcome Back,HR!</h2>
 
         <div className='filters'>
