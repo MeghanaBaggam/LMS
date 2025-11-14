@@ -17,7 +17,7 @@ export const HRDashboard = () => {
     const token=localStorage.getItem("token");
     const fetchEmp=async ()=>{
         try{
-            const response=await axios.get("http://127.0.0.1:8000/api/employees",{
+            const response=await axios.get("http://127.0.0.1:8000/api/users",{
                 headers:{Authorization:`Bearer ${token}`},
             });
             setEmployees(response.data);
@@ -30,7 +30,7 @@ useEffect(()=>{
     },[]);
     const addEmp=async ()=>{
         try{
-            await axios.post("http://127.0.0.1:8000/api/employees",{
+            await axios.post("http://127.0.0.1:8000/api/users",{
                 name,
                 email,
                 password,
@@ -48,7 +48,7 @@ useEffect(()=>{
     };
     const updateEmp=async ()=>{
         try{
-            await axios.put(`http://127.0.0.1:8000/api/employees/${editId}`,{
+            await axios.put(`http://127.0.0.1:8000/api/users/${editId}`,{
                 name,
                 email,
                 role,
@@ -71,7 +71,7 @@ useEffect(()=>{
              return;
         }
         try{
-            await axios.delete(`http://127.0.0.1:8000/api/employees/${id}`,{
+            await axios.delete(`http://127.0.0.1:8000/api/users/${id}`,{
                   headers:{Authorization:`Bearer ${token}`},
             });
             fetchEmp();
@@ -150,9 +150,9 @@ useEffect(()=>{
                      <div className='model-content'>
                         <h3>Add New Employee</h3>
 
-                        <input placeholder='Name' onChange={(e)=>setName(e.target.value)}/>
-                        <input placeholder='Email' onChange={(e)=>setEmail(e.target.value)}/>
-                        <input placeholder='password' onChange={(e)=>setPassword(e.target.value)}/>
+                        <input placeholder='Name' onChange={(e)=>setName(e.target.value)} required/>
+                        <input placeholder='Email' onChange={(e)=>setEmail(e.target.value)} required/>
+                        <input placeholder='password' type="password" onChange={(e)=>setPassword(e.target.value)} required/>
 
                         <select onChange={e=>setRole(e.target.value)}>
                             <option value="">Select Role</option>
@@ -163,7 +163,7 @@ useEffect(()=>{
                        <select onChange={e => setManagerId(e.target.value)}>     
                            <option value="">Select Manager</option>
                            {employees
-                            .filter(u=>u.role==="manager")
+                            .filter(u=>u.role==="manager" || u.role==="hr")
                             .map(m=>(
                                 <option key={m.id} value={m.id}>{m.name}</option>
                             ))
@@ -196,7 +196,7 @@ useEffect(()=>{
                     <select value={managerId} onChange={(e)=>setManagerId(e.target.value)}>
                         <option value="">Select Manager</option>
                         {employees
-                        .filter(u=>u.role==="manager")
+                        .filter(u=>u.role==="manager"|| u.role==="hr")
                         .map(m=>(
                             <option key={m.id} value={m.id}>{m.name}</option>
                         ))
