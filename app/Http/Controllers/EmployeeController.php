@@ -8,7 +8,7 @@ use  Illuminate\Support\Facades\Hash;
 class EmployeeController extends Controller
 {
     public function index(){
-        return User::with('roles')->orderBy('name')->get();
+        return User::with(['roles','manager'])->orderBy('name')->get();
     }
     public function store(Request $req){
         $req->validate([
