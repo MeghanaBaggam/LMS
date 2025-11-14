@@ -38,9 +38,6 @@ export const Login = () => {
         }
         
     };
-  
-
-   
   return (
     
         <div className='split-screen'>
@@ -90,5 +87,6 @@ export const Login = () => {
        </div>
        </div>
     
-  )
-}
+  );
+};
+export default Login;
