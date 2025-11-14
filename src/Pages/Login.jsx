@@ -20,7 +20,7 @@ export const Login = () => {
           const role=response.data.user.role;
 
           localStorage.setItem("token",token);
-          localStorage.setItem("role",role);
+          
           setMessage("Login Successful!!");
 
           //redirect based on role

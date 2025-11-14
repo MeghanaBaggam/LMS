@@ -21,9 +21,6 @@ export const HRDashboard = () => {
     const token=localStorage.getItem("token");
 
     const user=JSON.parse(localStorage.getItem("user"));
-    const userInitials=user?.name
-    ? user.name.split(" ").map(n=>n[0].join(" ").toUpperCase):"U";
-
 
     const fetchEmp=async ()=>{
         try{
@@ -97,33 +94,33 @@ useEffect(()=>{
   return (
     <div className='hr-container'>
         {/* for profile section */}
-        <div className='user-section'>
-            <div className='user-avtar' onClick={()=>setShowMenu(!showMenu)}>
-               <FaUserCircle />
+        <div className="top-right-menu">
+  <div className="user-info" onClick={() => setShowMenu(!showMenu)}>
+    <div className="avatar-circle">
+      <FaUserCircle />
+    </div>
+    <span className="user-name">{user?.name}</span>
+    {showMenu && (
+      <div className="dropdown-box">
+        <p onClick={()=>setShowProfile(true)}>Profile</p>
+        <p className="logout" onClick={logoutUser}>Logout</p>
+      </div>
+             )}
             </div>
-
-        </div>
-        {
-            showMenu && (
-                <div className='dropdown-menu'>
-                    <p onClick={()=>setShowProfile(true)}>Profile</p>
-                    <p onClick={logoutUser}>Logout</p>
-                </div>
-            )
-        }
-        {
-            showProfile && (
-                <div className='model'>
-                    <div className='model-content'>
-                        <h3>User Profile</h3>
-                        <p><strong>ID:</strong>{user?.id}</p>
-                        <p><strong>Name:</strong>{user?.name}</p>
-                         <p><strong>Email:</strong> {user?.email}</p>
-                         <p><strong>Role:</strong> {user?.role}</p>
-                        <p><strong>Manager ID:</strong> {user?.manager_id || "-"}</p>
-                        <button onClick={()=>setShowProfile(false)}>Close</button>
-                        </div>
                     </div>
+         {
+        showProfile && (
+         <div className='model'>
+             <div className='model-content'>
+             <h3>User Profile</h3>
+             <p><strong>ID:</strong>{user?.id}</p>
+             <p><strong>Name:</strong>{user?.name}</p>
+            <p><strong>Email:</strong> {user?.email}</p>
+             <p><strong>Role:</strong> {user?.role}</p>
+            <p><strong>Manager ID:</strong> {user?.manager_id || "-"}</p>
+            <button onClick={()=>setShowProfile(false)}>Close</button>
+            </div>
+            </div>
             )
         }
         <h2 className='welcome-text'>Welcome Back,HR!</h2>

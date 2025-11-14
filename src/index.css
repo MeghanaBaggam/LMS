@@ -202,3 +202,66 @@
   box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
 /* user profile */
+.top-right-menu {
+
+  position: absolute;
+  top: 15px;
+  right: 25px;
+  z-index: 999;
+}
+
+/* User info row */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  position: relative;
+}
+
+/* Avatar circle with initials */
+.avatar-circle {
+  width: 42px;
+  height: 42px;
+  background: #4b6cb7;
+  color: white;
+  font-size: 17px;
+  font-weight: bold;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Full name */
+.user-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Dropdown menu */
+.dropdown-box {
+  position: absolute;
+  top: 55px;
+  right: 0;
+  background: white;
+  width: 170px;
+  padding: 12px;
+  border-radius: 12px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+  animation: fadeIn 0.25s ease-in-out;
+}
+
+.dropdown-box p {
+  margin: 8px 0;
+  font-size: 15px;
+  cursor: pointer;
+  padding: 6px 0;
+}
+
+.dropdown-box p.logout {
+  color: red;
+  font-weight: 700;
+}
+
