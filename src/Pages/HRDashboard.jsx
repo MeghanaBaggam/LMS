@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaUserCircle } from "react-icons/fa";
 import ManageEmployees from '../Components/ManageEmployees';
-
+import TeamDetails from '../Components/TeamDetails';
 export const HRDashboard = () => {
     const [showMenu, setShowMenu] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
@@ -69,6 +69,10 @@ export const HRDashboard = () => {
             {activeTab === "manage-employees" && (
                 <ManageEmployees/>
             )}
+            {activeTab==="team-details" && (
+                <TeamDetails/>
+            )
+            }
         </div>
     );
 };

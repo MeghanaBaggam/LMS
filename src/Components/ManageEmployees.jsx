@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { FaUserCircle } from "react-icons/fa";
 import DataTable from 'react-data-table-component';
 
 
@@ -146,7 +145,7 @@ export const ManageEmployees = () => {
          {showAdd && (
             <div className="model">
             <div className="model-content">
-              <h3>Add New Employee</h3>
+              <h3 >Add New Employee</h3>
 
             <input placeholder="Name" onChange={(e) => setName(e.target.value)} />
              <input placeholder="Email" onChange={(e) => setEmail(e.target.value)} />

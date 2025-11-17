@@ -275,6 +275,7 @@
   font-size: 16px;
   font-weight: 500;
   margin-bottom: 20px;
+  
 }
 
 .nav-item {
@@ -287,5 +288,120 @@
   font-weight: 700;
   color: #8b3d57;
 }
+/* TeamDetails component */
+.team-details-container {
+  padding: 20px 40px;
+}
 
+.employee-list-title {
+  font-size: 45px;
+  font-weight: 80px;
+  color: #4a4a4a;
+  margin-bottom: 20px;
+  padding-bottom:25px;
+  margin-bottom: 0px; 
+  padding-bottom: 10px; 
+}
 
+.team-filters {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.search-input {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 180px;
+  font-size: 14px;
+   margin-bottom: 0px;
+   
+}
+
+.role-select {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: white;
+  font-size: 14px;
+   margin-bottom: 0px;
+ 
+}
+.team-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; 
+  margin-bottom: 10px;
+}
+
+.team-cards-layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25px;
+  justify-content: flex-start;
+  margin-top: 10px;
+  
+}
+
+.team-card {
+  width: 280px;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+.team-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items:   center;
+}
+
+.team-avtar {
+  font-size: 60px;
+  color: #444;
+}
+
+.emp-id {
+  font-size: 14px;
+  font-weight: 600;
+  color: #666;
+}
+.emp-name {
+  margin-top: 8px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  text-transform: capitalize;
+}
+
+.emp-role {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 10px;
+  text-transform: capitalize;
+}
+
+.emp-email {
+  font-size: 13px;
+  color: #777;
+  margin-bottom: 6px;
+}
+
+.emp-manager {
+  font-size: 13px;
+  color: #444;
+  margin-bottom: 10px;
+}
+
+.leave-balance {
+  font-size: 14px;
+  color: #333;
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+ 

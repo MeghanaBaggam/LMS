@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { FaUserCircle } from "react-icons/fa";
-import { loadConfigFromFile } from 'vite';
+
 
 export const TeamDetails = () => {
-    const [team,setTeam]=useState("");
+    const [team,setTeam]=useState([]);
     const [search, setSearch] = useState("");
     const [roleFilter, setRoleFilter] = useState("");
 
@@ -25,10 +25,12 @@ export const TeamDetails = () => {
         fetchEmp();
     },[]);
 
-const filterdTeam=team.filter((emp)=>emp.name.toLowerCase().includes(search.toLowerCase()))
+const filterdTeam=team
+                    .filter((emp)=>emp.name.toLowerCase().includes(search.toLowerCase()))
                      .filter(emp=>(roleFilter ?emp.role===roleFilter:true));
   return (
     <div className='team-details-container'>
+        <div className='team-header-row'>
        <h2 className='employee-list-title'>Employees List</h2>
        <div className='team-filters'>
        <input
@@ -45,6 +47,7 @@ const filterdTeam=team.filter((emp)=>emp.name.toLowerCase().includes(search.toLo
         <option value="manager">Manager</option>
         <option value="employee">Employee</option>
        </select>
+       </div>
 </div>
 <div className='team-cards-layout'>
 {filterdTeam.map((emp)=>(
