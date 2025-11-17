@@ -203,44 +203,17 @@ useEffect(()=>{
         </div>
 
         <table className='employee-table'>
-            <thead>
-                <tr>
-                    <th>Employee ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th>Reporting To</th>
-                    <th>Manager ID</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {
-                    employees.filter((emp)=>emp.name.toLowerCase().includes(search.toLowerCase()))
-                            .filter((emp)=>(roleFilter ? emp.role ===roleFilter:true))
-                            .map((emp)=>(
-                                <tr key={emp.id}>
-                                    <td>{emp.id}</td>
-                                    <td>{emp.name}</td>
-                                    <td>{emp.email}</td>
-                                    <td>{emp.role}</td>
-                                   <td>{emp.manager?.name||"-"}</td>
-                                   <td>{emp.manager_id || "-"}</td>
-                                   <td>
-                                    <button className='edit-btn' onClick={()=>{
-                                        setShowEdit(true);
-                                        setEditId(emp.id);
-                                        setName(emp.name);
-                                        setEmail(emp.email);
-                                        setRole(emp.role);
-                                        setManagerId(emp.manager_id);
-                                    }}>Edit</button>
-                                    <button className='delete-btn' onClick={()=>deleteEmp(emp.id)}>Delete</button>
-                                   </td>
-                                   </tr>
-                  ))
-                }
-            </tbody>
+            <DataTable
+            columns={columns}
+            data={employees
+                .filter(emp=>emp.name.toLowerCase().includes(search.toLowerCase()))
+                .filter(emp=>(roleFilter?emp.role===roleFilter:true))
+            }
+             pagination
+           
+            >
+
+            </DataTable>
         </table>
 
         {
