@@ -3,8 +3,6 @@ import { FaUserCircle } from "react-icons/fa";
 import ManageEmployees from '../Components/ManageEmployees';
 
 export const HRDashboard = () => {
-    
-  
     const [showMenu, setShowMenu] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
 

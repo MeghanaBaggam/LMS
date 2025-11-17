@@ -33,8 +33,6 @@ export const ManageEmployees = () => {
         fetchEmp();
     }, []);
 
-    
-
     const addEmp = async () => {
         try {
             await axios.post("http://127.0.0.1:8000/api/users", {
