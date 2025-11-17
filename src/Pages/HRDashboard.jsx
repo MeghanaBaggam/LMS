@@ -19,6 +19,8 @@ export const HRDashboard = () => {
      const [showMenu,setShowMenu]=useState(false);
      const [showProfile,setShowProfile]=useState(false);
 
+     const [activeTab,setActiveTab]=useState("manage-employees");
+
     const token=localStorage.getItem("token");
 
     const user=JSON.parse(localStorage.getItem("user"));
@@ -94,34 +96,34 @@ useEffect(()=>{
    }
    const columns=[
     {
-        name:"Employee ID",
+       name:<strong>Employee ID</strong>,
         selector:row=>row.id,
         sortable:true
     },
     {
-        name:"Name",
+        name:<strong>Name</strong>,
         selector:row=>row.name,
         sortable:true
     },
     {
-        name:"Email",
+        name:<strong>Email</strong>,
         selector:row=>row.email,
     },
     {
-        name:"Role",
+        name:<strong>Role</strong>,
         selector:row=>row.role,
         sortable:true
     },
     {
-        name:"Reporting To",
+        name:<strong>Reporting To</strong>,
         selector:row=>row.manager?.name||"-"
     },
     {
-        name:"Manager ID",
+        name:<strong>Manager ID</strong>,
         selector:row=>row.manager_id || "-"
     },
     {
-        name:"Actions",
+        name:<strong>Actions</strong>,
         cell:(row)=>(
             <>
             <button 
@@ -150,6 +152,24 @@ useEffect(()=>{
     }
    ];
   return (
+<div className='top-nav'>
+    {
+        [
+            {key:"leave-balance",label:"Leave Balance"},
+            {key:"leave-requests",label:"Leave Requests"},
+            {key:"team-details",label:"Team Details"},
+            {key:"team-leave-requests",label:"Team Leave Requests"},
+            {key:"manage-employees",label:"Manage Employees"},
+            {key:"employee-leave-requests",label:"Employee Leave Requests"}
+        ].map((tab)=>{
+            <span 
+            key={tab.key}
+            className={`nav-item ${activeTab===tab.key ? "active-tab":""}`}
+            onClick={()=>setActiveTab(tab.key)}>
+                {tab.label}
+            </span>
+        })
+    }
     <div className='hr-container'>
         {/* for profile section */}
         <div className="top-right-menu">
@@ -181,7 +201,7 @@ useEffect(()=>{
             </div>
             )
         }
-        <h2 className='welcome-text'>Welcome Back,HR!</h2>
+        <h2 className='welcome-text'>Welcome HR {user?.name}!!</h2>
 
         <div className='filters'>
             <input
@@ -282,6 +302,7 @@ useEffect(()=>{
                 </div>
             )
         }
+    </div>
     </div>
   );
 };
