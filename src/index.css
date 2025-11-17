@@ -217,7 +217,7 @@
   gap: 10px;
   cursor: pointer;
   position: relative;
-  padding-top: 50px;
+  padding-top:18px;
 }
 
 /* Avatar circle with initials */
@@ -265,4 +265,27 @@
   color: red;
   font-weight: 700;
 }
+/* Top-active-bars */
+.top-nav {
+  display: flex;
+  gap: 25px;
+  padding: 12px 20px;
+  background: rgb(235, 221, 188);; 
+  border-bottom: 0px solid #d8c8bb;
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.nav-item {
+  cursor: pointer;
+  padding-bottom: 5px;
+}
+
+.nav-item.active-tab {
+  border-bottom: 3px solid #8b3d57;
+  font-weight: 700;
+  color: #8b3d57;
+}
+
 
