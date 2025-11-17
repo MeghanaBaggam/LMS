@@ -21,9 +21,7 @@ export const HRDashboard = () => {
     const token=localStorage.getItem("token");
 
     const user=JSON.parse(localStorage.getItem("user"));
-    console.log({role:user?.role});
-    console.log(user);
-
+   
     const fetchEmp=async ()=>{
         try{
             const response=await axios.get("http://127.0.0.1:8000/api/users",{
