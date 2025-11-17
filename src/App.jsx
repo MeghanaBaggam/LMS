@@ -8,19 +8,27 @@ import LeaveBalance from './Components/LeaveBalance.jsx';
 import LeaveRequests from './Components/LeaveRequests.jsx';
 import TeamLeaveRequests from './Components/TeamLeaveRequests.jsx';
 import TeamDetails from './Components/TeamDetails.jsx';
-import EmployeeLeaveRequests from './Components/EmployeeLeaveRequest.jsx
+import EmployeeLeaveRequests from './Components/EmployeeLeaveRequest.jsx';
 export const App = () => {
   return (
    <Routes>
-    <Route path="/login" element={<Login/>}></Route>
-    <Route path="/hr" element={<HRDashboard/>}></Route>
-    <Route path="leave-balance" element={<LeaveBalance/>}></Route>
-    <Route path="leave-requests" element={<LeaveRequests/>}></Route>
-    <Route path="team-details" element={<TeamDetails/>}></Route>
-    <Route path="team-leave-requests" element={<TeamLeaveRequests/>}></Route>
-   <Route path="manage-employees" element={<ManageEmployees/>}></Route>
-    <Route path="employee-leave-requests" element={<EmployeeLeaveRequests/>}></Route>
-   </Routes>
+    <Route path="/" element={<Login/>}/>
+
+
+{/* nested routes */}
+    <Route path="/hr" element={<HRDashboard/>}>  
+
+     <Route index element={<LeaveRequests />}/>
+
+    <Route path="manage-employees" element={<ManageEmployees />} />
+      <Route path="leave-balance" element={<LeaveBalance />} />
+      <Route path="leave-requests" element={<LeaveRequests />} />
+      <Route path="team-details" element={<TeamDetails />} />
+      <Route path="team-leave-requests" element={<TeamLeaveRequests />} />
+      <Route path="employee-leave-requests" element={<EmployeeLeaveRequests />} />
+
+  </Route>
+  </Routes>
   );
 };
 export default App;

@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { FaUserCircle } from "react-icons/fa";
-import ManageEmployees from '../Components/ManageEmployees';
-import TeamDetails from '../Components/TeamDetails';
+import { NavLink,Outlet } from 'react-router-dom';
 export const HRDashboard = () => {
     const [showMenu, setShowMenu] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
 
-    const [activeTab, setActiveTab] = useState("manage-employees");
-    
     const user = JSON.parse(localStorage.getItem("user"));
     const logoutUser = () => {
         localStorage.removeItem("token");
@@ -49,30 +46,31 @@ export const HRDashboard = () => {
             <h2 className="welcome-text">Welcome HR {user?.name}!</h2>
 
             <div className="top-nav">
+
                 {[
-                    { key: "leave-balance", label: "Leave Balance" },
-                    { key: "leave-requests", label: "Leave Requests" },
-                    { key: "team-details", label: "Team Details" },
-                    { key: "team-leave-requests", label: "Team Leave Requests" },
-                    { key: "manage-employees", label: "Manage Employees" },
-                    { key: "employee-leave-requests", label: "Employee Leave Requests" },
+                    { path: "leave-balance", label: "Leave Balance" },
+                    { path: "leave-requests", label: "Leave Requests" },
+                    { path: "team-details", label: "Team Details" },
+                    { path: "team-leave-requests", label: "Team Leave Requests" },
+                    { path: "manage-employees", label: "Manage Employees" },
+                    { path: "employee-leave-requests", label: "Employee Leave Requests" },
                 ].map(tab => (
-                    <span
-                        key={tab.key}
-                        className={`nav-item ${activeTab === tab.key ? "active-tab" : ""}`}
-                        onClick={() => setActiveTab(tab.key)}
+                    <NavLink
+                        key={tab.path}
+                        to={tab.path}
+                        className={({isActive})=>
+                            isActive ? "nav-item active-tab" :"nav-item"
+                        }
+                      
                     >
                         {tab.label}
-                    </span>
+                    </NavLink>
                 ))}
             </div>
-            {activeTab === "manage-employees" && (
-                <ManageEmployees/>
-            )}
-            {activeTab==="team-details" && (
-                <TeamDetails/>
-            )
-            }
+            <div style={{marginTop:"20px"}}>
+                <Outlet/>
+            </div>
+           
         </div>
     );
 };
