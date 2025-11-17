@@ -2,6 +2,7 @@ import React from 'react'
 import { useState,useEffect } from 'react'
 import axios from 'axios'
 import { FaUserCircle } from "react-icons/fa";
+import DataTable from 'react-data-table-component';
 export const HRDashboard = () => {
     const [employees,setEmployees]=useState([]);
     const [search,setSearch]=useState("");
@@ -91,6 +92,63 @@ useEffect(()=>{
     localStorage.removeItem("user");
     window.location.href="/";
    }
+   const columns=[
+    {
+        name:"Employee ID",
+        selector:row=>row.id,
+        sortable:true
+    },
+    {
+        name:"Name",
+        selector:row=>row.name,
+        sortable:true
+    },
+    {
+        name:"Email",
+        selector:row=>row.email,
+    },
+    {
+        name:"Role",
+        selector:row=>row.role,
+        sortable:true
+    },
+    {
+        name:"Reporting To",
+        selector:row=>row.manager?.name||"-"
+    },
+    {
+        name:"Manager ID",
+        selector:row=>row.manager_id || "-"
+    },
+    {
+        name:"Actions",
+        cell:(row)=>(
+            <>
+            <button 
+            className='edit-btn'
+            onClick={()=>{
+                setShowEdit(true);
+                setEditId(row.id);
+                setName(row.name);
+                setEmail(row.email);
+                setRole(row.role);
+                setManagerId(row.manager_id);
+            }}
+            > Edit
+            </button>
+            <button
+            className='delete-btn'
+            onClick={()=>{
+            deleteEmp(row.id)
+            }}
+            >
+                Delete
+            </button>
+            </>
+        )
+
+    }
+   ];
   return (
     <div className='hr-container'>
         {/* for profile section */}
