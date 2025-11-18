@@ -3,7 +3,7 @@ import axios from 'axios';
 import { AgGridReact } from 'ag-grid-react';
 import { ModuleRegistry, AllCommunityModule, themeQuartz } from 'ag-grid-community';
 
- ModuleRegistry.registerModules([ AllCommunityModule ]);
+ModuleRegistry.registerModules([AllCommunityModule]);
 export const ManageEmployees = () => {
     const [employees, setEmployees] = useState([]);
     const [search, setSearch] = useState("");
@@ -80,16 +80,16 @@ export const ManageEmployees = () => {
     };
 
     const columns = [
-        { headerName:"ID",field:"id",sortable:true,filter:true,width:90},
-        {headerName:"Name",field:"name",sortable:true,filter:true},
-        { headerName:"Email",field:"email"},
-        { headerName:"Roles",field:"role",sortable:true},
-        { headerName:"Manager",field:"manager.name" },
-        { headerName:"Manager ID",field:"manager_id"},
+        { headerName: "ID", field: "id", sortable: true, filter: true, width: 90 },
+        { headerName: "Name", field: "name", sortable: true, filter: true },
+        { headerName: "Email", field: "email" },
+        { headerName: "Roles", field: "role", sortable: true },
+        { headerName: "Manager", field: "manager.name" },
+        { headerName: "Manager ID", field: "manager_id" },
         {
             headerName: "Actions",
-            field:"actions",
-            width:200,
+            field: "actions",
+            width: 200,
             cellRenderer: (params) => (
                 <div>
                     <button
@@ -115,105 +115,105 @@ export const ManageEmployees = () => {
         },
     ];
 
-    const filteredEmp=employees 
-            .filter(emp => emp.name.toLowerCase().includes(search.toLowerCase()))
-            .filter(emp => (roleFilter ? emp.role === roleFilter : true))
+    const filteredEmp = employees
+        .filter(emp => emp.name.toLowerCase().includes(search.toLowerCase()))
+        .filter(emp => (roleFilter ? emp.role === roleFilter : true))
 
-  return (
-    <>
-     <div className="filters">
-        <input
-            type="text"
-            placeholder="Search Employee"
-            className="search-input"
-            onChange={(e) => setSearch(e.target.value)}
-        />
-        <select
-            className="role-select"
-            onChange={(e) => setRoleFilter(e.target.value)}
-         >
-          <option value="">All Roles</option>
-          <option value="employee">Employee</option>
-           <option value="manager">Manager</option>
-           <option value="hr">HR</option>
-        </select>
-         <button
-            className="add-employee-btn"
-            onClick={() => setShowAdd(true)}
-        >
-        Add New Employee
-        </button>
-        </div>
+    return (
+        <>
+            <div className="filters">
+                <input
+                    type="text"
+                    placeholder="Search Employee"
+                    className="search-input"
+                    onChange={(e) => setSearch(e.target.value)}
+                />
+                <select
+                    className="role-select"
+                    onChange={(e) => setRoleFilter(e.target.value)}
+                >
+                    <option value="">All Roles</option>
+                    <option value="employee">Employee</option>
+                    <option value="manager">Manager</option>
+                    <option value="hr">HR</option>
+                </select>
+                <button
+                    className="add-employee-btn"
+                    onClick={() => setShowAdd(true)}
+                >
+                    Add New Employee
+                </button>
+            </div>
 
-        <AgGridReact theme={themeQuartz}
-        rowData={filteredEmp}
-        columnDefs={columns}
-        pagination={true}
-        paginationPageSize={6}
-        paginationPageSizeSelector={[5,10,15,20]}
-        domLayout='autoHeight'
+            <AgGridReact theme={themeQuartz}
+                rowData={filteredEmp}
+                columnDefs={columns}
+                pagination={true}
+                paginationPageSize={60}
+                paginationPageSizeSelector={[5, 10, 15, 20]}
+                domLayout='autoHeight'
             />
-        
-         {showAdd && (
-            <div className="model">
-            <div className="model-content">
-              <h3 >Add New Employee</h3>
 
-            <input placeholder="Name" onChange={(e) => setName(e.target.value)} />
-             <input placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
-              <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
+            {showAdd && (
+                <div className="model">
+                    <div className="model-content">
+                        <h3 >Add New Employee</h3>
 
-             <select onChange={(e) => setRole(e.target.value)}>
-              <option value="">Select Role</option>
-             <option value="hr">HR</option>
-            <option value="manager">Manager</option>
-            <option value="employee">Employee</option>
-            </select>
+                        <input placeholder="Name" onChange={(e) => setName(e.target.value)} />
+                        <input placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
+                        <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
 
-             <select onChange={(e) => setManagerId(e.target.value)}>
-                  <option value="">Select Manager</option>
-                     {employees
-                     .filter(u => u.role === "manager" || u.role === "hr")
-                    .map(m => (
-                  <option key={m.id} value={m.id}>{m.name}</option>
-              ))}
-            </select>
+                        <select onChange={(e) => setRole(e.target.value)}>
+                            <option value="">Select Role</option>
+                            <option value="hr">HR</option>
+                            <option value="manager">Manager</option>
+                            <option value="employee">Employee</option>
+                        </select>
 
-                <button onClick={addEmp}>Save</button>
-                <button onClick={() => setShowAdd(false)}>Cancel</button>
-           </div>
-         </div>
-    )}
-    {showEdit && (
-         <div className="model">
-         <div className="model-content">
-         <h3>Edit Employee</h3>
+                        <select onChange={(e) => setManagerId(e.target.value)}>
+                            <option value="">Select Manager</option>
+                            {employees
+                                .filter(u => u.role === "manager" || u.role === "hr")
+                                .map(m => (
+                                    <option key={m.id} value={m.id}>{m.name}</option>
+                                ))}
+                        </select>
 
-          <input value={name} onChange={(e) => setName(e.target.value)} />
-          <input value={email} onChange={(e) => setEmail(e.target.value)} />
+                        <button onClick={addEmp}>Save</button>
+                        <button onClick={() => setShowAdd(false)}>Cancel</button>
+                    </div>
+                </div>
+            )}
+            {showEdit && (
+                <div className="model">
+                    <div className="model-content">
+                        <h3>Edit Employee</h3>
 
-          <select value={role} onChange={(e) => setRole(e.target.value)}>
-           <option value="hr">HR</option>
-           <option value="manager">Manager</option>
-            <option value="employee">Employee</option>
-            </select>
+                        <input value={name} onChange={(e) => setName(e.target.value)} />
+                        <input value={email} onChange={(e) => setEmail(e.target.value)} />
 
-          <select value={managerId} onChange={(e) => setManagerId(e.target.value)}>
-         <option value="">Select Manager</option>
-         {employees
-            .filter(u => u.role === "manager" || u.role === "hr")
-           .map(m => (
-               <option key={m.id} value={m.id}>{m.name}</option>
-              ))}
-         </select>
-                <button onClick={updateEmp}>Update</button>
-                 <button onClick={() => setShowEdit(false)}>Cancel</button>
-             </div>
-        </div>
-  )}
+                        <select value={role} onChange={(e) => setRole(e.target.value)}>
+                            <option value="hr">HR</option>
+                            <option value="manager">Manager</option>
+                            <option value="employee">Employee</option>
+                        </select>
 
-</>
-    
-  );
+                        <select value={managerId} onChange={(e) => setManagerId(e.target.value)}>
+                            <option value="">Select Manager</option>
+                            {employees
+                                .filter(u => u.role === "manager" || u.role === "hr")
+                                .map(m => (
+                                    <option key={m.id} value={m.id}>{m.name}</option>
+                                ))}
+                        </select>
+                        <button onClick={updateEmp}>Update</button>
+                        <button onClick={() => setShowEdit(false)}>Cancel</button>
+                    </div>
+                </div>
+            )}
+
+        </>
+
+    );
 };
 export default ManageEmployees;

@@ -1,10 +1,10 @@
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import { FaUserCircle } from "react-icons/fa";
-import { NavLink,Outlet } from 'react-router-dom';
+import { NavLink, Outlet } from 'react-router-dom';
 export const ManagerDashboard = () => {
     const [showMenu, setShowMenu] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
-     
+
     const user = JSON.parse(localStorage.getItem("user"));
     const logoutUser = () => {
         localStorage.removeItem("token");
@@ -52,24 +52,24 @@ export const ManagerDashboard = () => {
                     { path: "leave-requests", label: "Leave Requests" },
                     { path: "team-details", label: "Team Details" },
                     { path: "team-leave-requests", label: "Team Leave Requests" },
-                   
+
                 ].map(tab => (
                     <NavLink
                         key={tab.path}
                         to={tab.path}
-                        className={({isActive})=>
-                            isActive ? "nav-item active-tab" :"nav-item"
+                        className={({ isActive }) =>
+                            isActive ? "nav-item active-tab" : "nav-item"
                         }
-                      
+
                     >
                         {tab.label}
                     </NavLink>
                 ))}
             </div>
             <div>
-                <Outlet/>
+                <Outlet />
             </div>
-           
+
         </div>
     );
 };

@@ -1,12 +1,12 @@
-import React, { useState,useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaUserCircle } from "react-icons/fa";
-import { NavLink,Outlet } from 'react-router-dom';
+import { NavLink, Outlet } from 'react-router-dom';
 
 
 export const EmployeeDashboard = () => {
     const [showMenu, setShowMenu] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
-    
+
 
     const user = JSON.parse(localStorage.getItem("user"));
     const logoutUser = () => {
@@ -15,18 +15,18 @@ export const EmployeeDashboard = () => {
         window.location.href = "/";
     };
     return (
-    <div className="hr-container">
-       <div className="top-right-menu">
-          <div className="user-info" onClick={() => setShowMenu(!showMenu)}>
-             <div className="avatar-circle">
-                 <FaUserCircle />
-            </div>
-         <span className="user-name">{user?.name}</span>
+        <div className="hr-container">
+            <div className="top-right-menu">
+                <div className="user-info" onClick={() => setShowMenu(!showMenu)}>
+                    <div className="avatar-circle">
+                        <FaUserCircle />
+                    </div>
+                    <span className="user-name">{user?.name}</span>
 
-     {showMenu && (
-             <div className="dropdown-box">
-              <p onClick={() => setShowProfile(true)}>Profile</p>
-              <p className="logout" onClick={logoutUser}>Logout</p>
+                    {showMenu && (
+                        <div className="dropdown-box">
+                            <p onClick={() => setShowProfile(true)}>Profile</p>
+                            <p className="logout" onClick={logoutUser}>Logout</p>
                         </div>
                     )}
                 </div>
@@ -52,24 +52,24 @@ export const EmployeeDashboard = () => {
                 {[
                     { path: "leave-balance", label: "Leave Balance" },
                     { path: "leave-requests", label: "Leave Requests" },
-                   
+
                 ].map(tab => (
                     <NavLink
                         key={tab.path}
                         to={tab.path}
-                        className={({isActive})=>
-                            isActive ? "nav-item active-tab" :"nav-item"
+                        className={({ isActive }) =>
+                            isActive ? "nav-item active-tab" : "nav-item"
                         }
-                      
+
                     >
                         {tab.label}
                     </NavLink>
                 ))}
             </div>
             <div>
-                <Outlet/>
+                <Outlet />
             </div>
-           
+
         </div>
     );
 };
