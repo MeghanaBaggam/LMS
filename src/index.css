@@ -419,5 +419,123 @@
     background-color: #f0f0f0;
 }
 
+/* leave balance */
+.leave-balance-main {
+  display: flex;
+  justify-content: space-between;
+  padding: 30px 40px;
+  align-items: flex-start;
+}
 
- 
+/* LEFT CARD */
+.employee-card {
+  width: 250px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.lb-avatar {
+  font-size: 70px;
+  color: #444;
+}
+
+.lb-id {
+  color: #555;
+  font-size: 14px;
+}
+
+.lb-name {
+  font-size: 22px;
+  margin: 10px 0;
+  text-transform: capitalize;
+}
+
+.lb-role {
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.lb-email, .lb-report {
+  color: #777;
+  font-size: 14px;
+  margin: 5px 0;
+}
+
+.lb-leave {
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+/* CENTER CHART */
+.lb-chart-section {
+  text-align: center;
+}
+
+.lb-chart-title {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.lb-chart-legend {
+  margin-top: 20px;
+}
+
+.lb-legend-item {
+  font-size: 14px;
+  margin: 5px 0;
+}
+
+/* Legend colors */
+.balance-color {
+  width: 14px;
+  height: 14px;
+  background: #f1c40f;
+  display: inline-block;
+  margin-right: 6px;
+  border-radius: 50%;
+}
+
+.unpaid-color {
+  width: 14px;
+  height: 14px;
+  background: #c0392b;
+  display: inline-block;
+  margin-right: 6px;
+  border-radius: 50%;
+}
+
+/* RIGHT CALENDAR */
+.lb-calendar {
+  width: 280px;
+  text-align: center;
+}
+
+.lb-calendar-legend {
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 6px;
+  margin-left: 12px;
+}
+
+.today-dot {
+  background: #2e86de;
+}
+
+.leave-dot {
+  background: #e6e0ca;
+}
+
+.holiday-dot {
+  background: #c0392b;
+}
