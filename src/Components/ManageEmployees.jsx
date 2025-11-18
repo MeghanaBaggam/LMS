@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import DataTable from 'react-data-table-component';
+import { AgGridReact } from 'ag-grid-react';
+import { ModuleRegistry, AllCommunityModule, themeQuartz } from 'ag-grid-community';
 
-
+ ModuleRegistry.registerModules([ AllCommunityModule ]);
 export const ManageEmployees = () => {
     const [employees, setEmployees] = useState([]);
     const [search, setSearch] = useState("");
     const [roleFilter, setRoleFilter] = useState("");
     const [showAdd, setShowAdd] = useState(false);
     const [showEdit, setShowEdit] = useState(false);
+
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -78,38 +80,45 @@ export const ManageEmployees = () => {
     };
 
     const columns = [
-        { name: <strong>Employee ID</strong>, selector: row => row.id, sortable: true },
-        { name: <strong>Name</strong>, selector: row => row.name, sortable: true },
-        { name: <strong>Email</strong>, selector: row => row.email },
-        { name: <strong>Role</strong>, selector: row => row.role, sortable: true },
-        { name: <strong>Reporting To</strong>, selector: row => row.manager?.name || "-" },
-        { name: <strong>Manager ID</strong>, selector: row => row.manager_id || "-" },
+        { headerName:"ID",field:"id",sortable:true,filter:true,width:90},
+        {headerName:"Name",field:"name",sortable:true,filter:true},
+        { headerName:"Email",field:"email"},
+        { headerName:"Roles",field:"role",sortable:true},
+        { headerName:"Manager",field:"manager.name" },
+        { headerName:"Manager ID",field:"manager_id"},
         {
-            name: <strong>Actions</strong>,
-            cell: (row) => (
-                <>
+            headerName: "Actions",
+            field:"actions",
+            width:200,
+            cellRenderer: (params) => (
+                <div>
                     <button
                         className='edit-btn'
                         onClick={() => {
                             setShowEdit(true);
-                            setEditId(row.id);
-                            setName(row.name);
-                            setEmail(row.email);
-                            setRole(row.role);
-                            setManagerId(row.manager_id);
+                            setEditId(params.data.id);
+                            setName(params.data.name);
+                            setEmail(params.data.email);
+                            setRole(params.data.role);
+                            setManagerId(params.data.manager_id);
                         }}>
                         Edit
                     </button>
 
                     <button
                         className='delete-btn'
-                        onClick={() => deleteEmp(row.id)}>
+                        onClick={() => deleteEmp(params.data.id)}>
                         Delete
                     </button>
-                </>
+                </div>
             )
         },
     ];
+
+    const filteredEmp=employees 
+            .filter(emp => emp.name.toLowerCase().includes(search.toLowerCase()))
+            .filter(emp => (roleFilter ? emp.role === roleFilter : true))
+
   return (
     <>
      <div className="filters">
@@ -135,13 +144,16 @@ export const ManageEmployees = () => {
         Add New Employee
         </button>
         </div>
-         <DataTable
-            columns={columns}
-            data={employees
-            .filter(emp => emp.name.toLowerCase().includes(search.toLowerCase()))
-            .filter(emp => (roleFilter ? emp.role === roleFilter : true))}
-             pagination
-         />
+
+        <AgGridReact theme={themeQuartz}
+        rowData={filteredEmp}
+        columnDefs={columns}
+        pagination={true}
+        paginationPageSize={6}
+        paginationPageSizeSelector={[5,10,15,20]}
+        domLayout='autoHeight'
+            />
+        
          {showAdd && (
             <div className="model">
             <div className="model-content">
