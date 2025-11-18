@@ -478,7 +478,7 @@
   font-size: 22px;
   font-weight: bold;
   margin-bottom: 15px;
-}
+} 
 
 .lb-chart-legend {
   margin-top: 20px;
@@ -529,13 +529,13 @@
 }
 
 .today-dot {
-  background: #2e86de;
+  background: yellow;
 }
 
 .leave-dot {
-  background: #e6e0ca;
+  background: darkgreen;
 }
 
 .holiday-dot {
-  background: #c0392b;
+  background: red;
 }

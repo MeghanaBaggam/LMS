@@ -11,7 +11,7 @@ export const LeaveBalance = () => {
   const used=20-user.leave_balance;
 
   const chartData={
-    labels:["Used","Unavailable"],
+    labels:["Used","Available"],
     datasets:[
       {
         data:[used,user.leave_balance],

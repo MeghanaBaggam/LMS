@@ -1,7 +1,7 @@
 import React, { useState} from 'react';
 import { FaUserCircle } from "react-icons/fa";
 import { NavLink,Outlet } from 'react-router-dom';
-export const HRDashboard = () => {
+export const ManagerDashboard = () => {
     const [showMenu, setShowMenu] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
 
@@ -52,8 +52,7 @@ export const HRDashboard = () => {
                     { path: "leave-requests", label: "Leave Requests" },
                     { path: "team-details", label: "Team Details" },
                     { path: "team-leave-requests", label: "Team Leave Requests" },
-                    { path: "manage-employees", label: "Manage Employees" },
-                    { path: "employee-leave-requests", label: "Employee Leave Requests" },
+                   
                 ].map(tab => (
                     <NavLink
                         key={tab.path}
@@ -75,4 +74,4 @@ export const HRDashboard = () => {
     );
 };
 
-export default HRDashboard;
+export default ManagerDashboard;
