@@ -1,6 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import axios from 'axios';
-import DataTable from 'react-data-table-component';
+import { AgGridReact } from 'ag-grid-react';
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-quartz.css';
+
+// Actions Cell Renderer Component
+const ActionsCellRenderer = (props) => {
+    const { onEdit, onDelete } = props;
+    const row = props.data;
+
+    return (
+        <div style={{ display: 'flex', gap: '8px', height: '100%', alignItems: 'center' }}>
+            <button
+                className='edit-btn'
+                onClick={() => onEdit(row)}>
+                Edit
+            </button>
+            <button
+                className='delete-btn'
+                onClick={() => onDelete(row.id)}>
+                Delete
+            </button>
+        </div>
+    );
+};
 
 
 export const ManageEmployees = () => {
@@ -17,7 +40,8 @@ export const ManageEmployees = () => {
     const [editId, setEditId] = useState(null);
 
     const token = localStorage.getItem("token");
-    const fetchEmp = async () => {
+
+    const fetchEmp = useCallback(async () => {
         try {
             const response = await axios.get("http://127.0.0.1:8000/api/users", {
                 headers: { Authorization: `Bearer ${token}` },
@@ -26,11 +50,11 @@ export const ManageEmployees = () => {
         } catch (error) {
             console.log("Error fetching data", error);
         }
-    };
+    }, [token]);
 
     useEffect(() => {
         fetchEmp();
-    }, []);
+    }, [fetchEmp]);
 
     const addEmp = async () => {
         try {
@@ -64,8 +88,8 @@ export const ManageEmployees = () => {
         }
     };
 
-    const deleteEmp = async (id) => {
-        if (!window.confirm("Are You sure you want to delete this employee?")) return;
+    const deleteEmp = useCallback(async (id) => {
+        if (!globalThis.confirm("Are You sure you want to delete this employee?")) return;
 
         try {
             await axios.delete(`http://127.0.0.1:8000/api/users/${id}`, {
@@ -75,41 +99,72 @@ export const ManageEmployees = () => {
         } catch (error) {
             console.log("error", error);
         }
-    };
+    }, [token, fetchEmp]);
 
-    const columns = [
-        { name: <strong>Employee ID</strong>, selector: row => row.id, sortable: true },
-        { name: <strong>Name</strong>, selector: row => row.name, sortable: true },
-        { name: <strong>Email</strong>, selector: row => row.email },
-        { name: <strong>Role</strong>, selector: row => row.role, sortable: true },
-        { name: <strong>Reporting To</strong>, selector: row => row.manager?.name || "-" },
-        { name: <strong>Manager ID</strong>, selector: row => row.manager_id || "-" },
+    const handleEdit = useCallback((row) => {
+        setShowEdit(true);
+        setEditId(row.id);
+        setName(row.name);
+        setEmail(row.email);
+        setRole(row.role);
+        setManagerId(row.manager_id);
+    }, []);
+
+    const columnDefs = useMemo(() => [
         {
-            name: <strong>Actions</strong>,
-            cell: (row) => (
-                <>
-                    <button
-                        className='edit-btn'
-                        onClick={() => {
-                            setShowEdit(true);
-                            setEditId(row.id);
-                            setName(row.name);
-                            setEmail(row.email);
-                            setRole(row.role);
-                            setManagerId(row.manager_id);
-                        }}>
-                        Edit
-                    </button>
-
-                    <button
-                        className='delete-btn'
-                        onClick={() => deleteEmp(row.id)}>
-                        Delete
-                    </button>
-                </>
-            )
+            headerName: 'Employee ID',
+            field: 'id',
+            sortable: true,
+            filter: true,
+            width: 130
         },
-    ];
+        {
+            headerName: 'Name',
+            field: 'name',
+            sortable: true,
+            filter: true,
+            flex: 1
+        },
+        {
+            headerName: 'Email',
+            field: 'email',
+            filter: true,
+            flex: 1
+        },
+        {
+            headerName: 'Role',
+            field: 'role',
+            sortable: true,
+            filter: true,
+            width: 120
+        },
+        {
+            headerName: 'Reporting To',
+            field: 'manager.name',
+            valueGetter: params => params.data?.manager?.name || "-",
+            filter: true,
+            flex: 1
+        },
+        {
+            headerName: 'Manager ID',
+            field: 'manager_id',
+            valueGetter: params => params.data?.manager_id || "-",
+            filter: true,
+            width: 120
+        },
+        {
+            headerName: 'Actions',
+            cellRenderer: ActionsCellRenderer,
+            cellRendererParams: {
+                onEdit: handleEdit,
+                onDelete: deleteEmp
+            },
+            width: 180,
+            sortable: false,
+            filter: false,
+            pinned: 'right'
+        },
+    ], [deleteEmp, handleEdit]);
   return (
     <>
      <div className="filters">
@@ -135,13 +190,25 @@ export const ManageEmployees = () => {
         Add New Employee
         </button>
         </div>
-         <DataTable
-            columns={columns}
-            data={employees
-            .filter(emp => emp.name.toLowerCase().includes(search.toLowerCase()))
-            .filter(emp => (roleFilter ? emp.role === roleFilter : true))}
-             pagination
-         />
+         <div className="ag-theme-quartz" style={{ height: 500, width: '100%' }}>
+            <AgGridReact
+                rowData={employees
+                    .filter(emp => emp.name.toLowerCase().includes(search.toLowerCase()))
+                    .filter(emp => (roleFilter ? emp.role === roleFilter : true))}
+                columnDefs={columnDefs}
+                defaultColDef={{
+                    resizable: true,
+                    sortable: true,
+                    filter: true,
+                }}
+                pagination={true}
+                paginationPageSize={10}
+                paginationPageSizeSelector={[10, 20, 50, 100]}
+                animateRows={true}
+                rowSelection="single"
+                domLayout='normal'
+            />
+         </div>
          {showAdd && (
             <div className="model">
             <div className="model-content">
