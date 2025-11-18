@@ -67,7 +67,7 @@ export const HRDashboard = () => {
                     </NavLink>
                 ))}
             </div>
-            <div style={{marginTop:"20px"}}>
+            <div>
                 <Outlet/>
             </div>
            

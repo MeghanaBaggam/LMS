@@ -403,5 +403,21 @@
   margin-top: 10px;
   font-weight: 600;
 }
+.nav-item {
+    color: #333 !important;        
+    text-decoration: none !important;
+    cursor: pointer;
+    padding: 8px 15px;
+    font-size: 16px;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+
+/* Hover effect */
+.nav-item:hover {
+    background-color: #f0f0f0;
+}
+
 
  
