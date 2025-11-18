@@ -435,6 +435,7 @@
   border-radius: 16px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   text-align: center;
+ cursor: pointer;
 }
 
 .lb-avatar {
@@ -472,6 +473,7 @@
 /* CENTER CHART */
 .lb-chart-section {
   text-align: center;
+  cursor: pointer;
 }
 
 .lb-chart-title {
@@ -493,7 +495,7 @@
 .balance-color {
   width: 14px;
   height: 14px;
-  background: #f1c40f;
+  background: red;
   display: inline-block;
   margin-right: 6px;
   border-radius: 50%;

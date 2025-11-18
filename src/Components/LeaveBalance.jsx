@@ -43,7 +43,6 @@ export const LeaveBalance = () => {
             <span className="balance-color"></span> Balance: {user.leave_balance}/20
           </div>
           <div className="lb-legend-item">
-            <span className="unpaid-color"></span> Unpaid: ∞/ ∞
           </div>
         </div>
       </div>

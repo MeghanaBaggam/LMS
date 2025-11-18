@@ -1,9 +1,12 @@
-import React, { useState} from 'react';
+import React, { useState,useEffect} from 'react';
 import { FaUserCircle } from "react-icons/fa";
 import { NavLink,Outlet } from 'react-router-dom';
+
+
 export const EmployeeDashboard = () => {
     const [showMenu, setShowMenu] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
+    
 
     const user = JSON.parse(localStorage.getItem("user"));
     const logoutUser = () => {
@@ -12,23 +15,22 @@ export const EmployeeDashboard = () => {
         window.location.href = "/";
     };
     return (
-        <div className="hr-container">
-            <div className="top-right-menu">
-                <div className="user-info" onClick={() => setShowMenu(!showMenu)}>
-                    <div className="avatar-circle">
-                        <FaUserCircle />
-                    </div>
-                    <span className="user-name">{user?.name}</span>
+    <div className="hr-container">
+       <div className="top-right-menu">
+          <div className="user-info" onClick={() => setShowMenu(!showMenu)}>
+             <div className="avatar-circle">
+                 <FaUserCircle />
+            </div>
+         <span className="user-name">{user?.name}</span>
 
-                    {showMenu && (
-                        <div className="dropdown-box">
-                            <p onClick={() => setShowProfile(true)}>Profile</p>
-                            <p className="logout" onClick={logoutUser}>Logout</p>
+     {showMenu && (
+             <div className="dropdown-box">
+              <p onClick={() => setShowProfile(true)}>Profile</p>
+              <p className="logout" onClick={logoutUser}>Logout</p>
                         </div>
                     )}
                 </div>
             </div>
-
             {showProfile && (
                 <div className="model">
                     <div className="model-content">
@@ -43,7 +45,7 @@ export const EmployeeDashboard = () => {
                 </div>
             )}
 
-            <h2 className="welcome-text">Welcome HR {user?.name}!</h2>
+            <h2 className="welcome-text">Welcome {user?.name}!</h2>
 
             <div className="top-nav">
 

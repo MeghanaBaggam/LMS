@@ -4,7 +4,7 @@ import { NavLink,Outlet } from 'react-router-dom';
 export const ManagerDashboard = () => {
     const [showMenu, setShowMenu] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
-
+     
     const user = JSON.parse(localStorage.getItem("user"));
     const logoutUser = () => {
         localStorage.removeItem("token");
@@ -43,7 +43,7 @@ export const ManagerDashboard = () => {
                 </div>
             )}
 
-            <h2 className="welcome-text">Welcome HR {user?.name}!</h2>
+            <h2 className="welcome-text">Welcome Manager {user?.name}!</h2>
 
             <div className="top-nav">
 

@@ -26,7 +26,7 @@ export const Login = () => {
           
           setMessage("Login Successful!!");
 
-          //redirect based on role
+         
           if(role==='hr'){
             navigate('/hr');
           }
