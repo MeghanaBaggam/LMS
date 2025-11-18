@@ -80,7 +80,7 @@ export const ManageEmployees = () => {
     };
 
     const columns = [
-        { headerName: "ID", field: "id", sortable: true, filter: true, width: 90 },
+        { headerName: "ID", field: "id", sortable: true, filter: true, width:250},
         { headerName: "Name", field: "name", sortable: true, filter: true },
         { headerName: "Email", field: "email" },
         { headerName: "Roles", field: "role", sortable: true },
