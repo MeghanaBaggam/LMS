@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { UserService } from '../Services/userService';
 import { AgGridReact } from 'ag-grid-react';
 import { ModuleRegistry, AllCommunityModule, themeQuartz } from 'ag-grid-community';
 
@@ -21,9 +21,7 @@ export const ManageEmployees = () => {
     const token = localStorage.getItem("token");
     const fetchEmp = async () => {
         try {
-            const response = await axios.get("http://127.0.0.1:8000/api/users", {
-                headers: { Authorization: `Bearer ${token}` },
-            });
+            const response = await UserService.getAllUsers();
             setEmployees(response.data);
         } catch (error) {
             console.log("Error fetching data", error);
@@ -36,12 +34,13 @@ export const ManageEmployees = () => {
 
     const addEmp = async () => {
         try {
-            await axios.post("http://127.0.0.1:8000/api/users", {
-                name, email, password, role, manager_id: managerId
-            }, {
-                headers: { Authorization: `Bearer ${token}` }
+            await UserService.createUser({
+                name,
+                email,
+                password,
+                role,
+              manager_id:managerId
             });
-
             fetchEmp();
             setShowAdd(false);
 
@@ -52,11 +51,12 @@ export const ManageEmployees = () => {
 
     const updateEmp = async () => {
         try {
-            await axios.put(`http://127.0.0.1:8000/api/users/${editId}`, {
-                name, email, role, manager_id: managerId
-            }, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            await UserService.updateUser({\
+                name,
+                email,
+                role,
+                manager_id:managerId
+            })
 
             fetchEmp();
             setShowEdit(false);
@@ -70,9 +70,7 @@ export const ManageEmployees = () => {
         if (!window.confirm("Are You sure you want to delete this employee?")) return;
 
         try {
-            await axios.delete(`http://127.0.0.1:8000/api/users/${id}`, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
+            await UserService.deleteUser(id)
             fetchEmp();
         } catch (error) {
             console.log("error", error);
