@@ -51,7 +51,7 @@ export const ManageEmployees = () => {
 
     const updateEmp = async () => {
         try {
-            await UserService.updateUser({
+            await UserService.updateUser(editId,{
                 name,
                 email,
                 role,
