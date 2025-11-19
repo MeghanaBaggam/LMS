@@ -4,19 +4,29 @@ import { AgGridReact } from 'ag-grid-react';
 import { ModuleRegistry, AllCommunityModule, themeQuartz } from 'ag-grid-community';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
+const initialFormState = {
+    name: "",
+    email: "",
+    password: "",
+    role: "",
+    managerId: ""
+};
 export const ManageEmployees = () => {
     const [employees, setEmployees] = useState([]);
     const [search, setSearch] = useState("");
     const [roleFilter, setRoleFilter] = useState("");
+
     const [showAdd, setShowAdd] = useState(false);
     const [showEdit, setShowEdit] = useState(false);
 
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [role, setRole] = useState("");
-    const [managerId, setManagerId] = useState("");
+    const [formData, setformData] = useState(initialFormState);
     const [editId, setEditId] = useState(null);
+
+    const handleFormData = (e) => {
+        const { name, value } = e.target;
+        setformData(prevData => ({ ...prevData, [name]: value }));
+    };
+
 
     const fetchEmp = async () => {
         try {
@@ -34,14 +44,15 @@ export const ManageEmployees = () => {
     const addEmp = async () => {
         try {
             await UserService.createUser({
-                name,
-                email,
-                password,
-                role,
-              manager_id:managerId
+                name: formData.name,
+                email: formData.email,
+                password: formData.password,
+                role: formData.role,
+                manager_id: formData.managerId
             });
             fetchEmp();
             setShowAdd(false);
+            setformData(initialFormState);
 
         } catch (error) {
             console.log("Add Error", error);
@@ -50,15 +61,17 @@ export const ManageEmployees = () => {
 
     const updateEmp = async () => {
         try {
-            await UserService.updateUser(editId,{
-                name,
-                email,
-                role,
-                manager_id:managerId
+            await UserService.updateUser(editId, {
+                name: formData.name,
+                email: formData.email,
+                role: formData.role,
+                manager_id: formData.managerId
             });
 
             fetchEmp();
             setShowEdit(false);
+            setformData(initialFormState);
+            setEditId(null);
 
         } catch (error) {
             console.log("Update Error:", error);
@@ -74,6 +87,19 @@ export const ManageEmployees = () => {
         } catch (error) {
             console.log("error", error);
         }
+    };
+
+    const handleEditClick = (data) => {
+        setShowEdit(true);
+        setEditId(data.id);
+        setformData({
+            name: data.name,
+            email: data.email,
+            password: "",
+            role: data.role,
+            managerId: data.manager_id || "",
+        });
+        setShowEdit(true);
     };
 
     const columns = [
@@ -92,12 +118,7 @@ export const ManageEmployees = () => {
                     <button
                         className='edit-btn'
                         onClick={() => {
-                            setShowEdit(true);
-                            setEditId(params.data.id);
-                            setName(params.data.name);
-                            setEmail(params.data.email);
-                            setRole(params.data.role);
-                            setManagerId(params.data.manager_id);
+                            handleEditClick(params.data)
                         }}>
                         Edit
                     </button>
@@ -136,7 +157,10 @@ export const ManageEmployees = () => {
                 </select>
                 <button
                     className="add-employee-btn"
-                    onClick={() => setShowAdd(true)}
+                    onClick={() => {
+                        setShowAdd(true);
+                        setformData(initialFormState);
+                    }}
                 >
                     Add New Employee
                 </button>
@@ -156,18 +180,18 @@ export const ManageEmployees = () => {
                     <div className="model-content">
                         <h3 >Add New Employee</h3>
 
-                        <input placeholder="Name" onChange={(e) => setName(e.target.value)} />
-                        <input placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
-                        <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
+                        <input name="name" placeholder="Name" value={formData.name} onChange={handleFormData} />
+                        <input name="email" placeholder="Email" value={formData.email} onChange={handleFormData} />
+                        <input name="password" type="password" value={formData.password} placeholder="Password" onChange={handleFormData} />
 
-                        <select onChange={(e) => setRole(e.target.value)}>
+                        <select name="role" value={formData.role} onChange={handleFormData}>
                             <option value="">Select Role</option>
                             <option value="hr">HR</option>
                             <option value="manager">Manager</option>
                             <option value="employee">Employee</option>
                         </select>
 
-                        <select onChange={(e) => setManagerId(e.target.value)}>
+                        <select name="managerId" value={formData.managerId} onChange={handleFormData}>
                             <option value="">Select Manager</option>
                             {employees
                                 .filter(u => u.role === "manager" || u.role === "hr")
@@ -186,16 +210,16 @@ export const ManageEmployees = () => {
                     <div className="model-content">
                         <h3>Edit Employee</h3>
 
-                        <input value={name} onChange={(e) => setName(e.target.value)} />
-                        <input value={email} onChange={(e) => setEmail(e.target.value)} />
+                        <input name="name" value={formData.name} onChange={handleFormData} />
+                        <input name="email" value={formData.email} onChange={handleFormData} />
 
-                        <select value={role} onChange={(e) => setRole(e.target.value)}>
+                        <select name="role" value={formData.role} onChange={handleFormData}>
                             <option value="hr">HR</option>
                             <option value="manager">Manager</option>
                             <option value="employee">Employee</option>
                         </select>
 
-                        <select value={managerId} onChange={(e) => setManagerId(e.target.value)}>
+                        <select name="managerId" value={formData.managerId} onChange={handleFormData}>
                             <option value="">Select Manager</option>
                             {employees
                                 .filter(u => u.role === "manager" || u.role === "hr")
