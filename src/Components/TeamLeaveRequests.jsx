@@ -1,8 +1,6 @@
-import React from 'react'
+import React from "react";
 
 export const TeamLeaveRequests = () => {
-  return (
-    <div>TeamLeaveRequests</div>
-  );
+  return <div>TeamLeaveRequests</div>;
 };
 export default TeamLeaveRequests;
