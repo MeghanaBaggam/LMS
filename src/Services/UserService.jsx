@@ -3,18 +3,18 @@ import api from './api';
 
 export const UserService = {
 
-    getAllUsers(){
+    getAllUsers:()=>{
         return api.get("/users");
     },
 
-    createUser(){
-        return api.post("/users",data);
+    createUser:(userData)=>{
+        return api.post("/users",userData);
     },
 
-    updateUser(){
-        return api.put(`/users/${id}`,data);
+    updateUser:(id,userData)=>{
+        return api.put(`/users/${id}`,userData);
     },
-    deleteUser(){
+    deleteUser:(id)=>{
         return api.delete(`/users/${id}`);
     }
 };
