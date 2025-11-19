@@ -18,7 +18,6 @@ export const ManageEmployees = () => {
     const [managerId, setManagerId] = useState("");
     const [editId, setEditId] = useState(null);
 
-    const token = localStorage.getItem("token");
     const fetchEmp = async () => {
         try {
             const response = await UserService.getAllUsers();
