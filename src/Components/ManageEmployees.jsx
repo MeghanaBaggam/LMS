@@ -51,12 +51,12 @@ export const ManageEmployees = () => {
 
     const updateEmp = async () => {
         try {
-            await UserService.updateUser({\
+            await UserService.updateUser({
                 name,
                 email,
                 role,
                 manager_id:managerId
-            })
+            });
 
             fetchEmp();
             setShowEdit(false);
@@ -70,7 +70,7 @@ export const ManageEmployees = () => {
         if (!window.confirm("Are You sure you want to delete this employee?")) return;
 
         try {
-            await UserService.deleteUser(id)
+            await UserService.deleteUser(id);
             fetchEmp();
         } catch (error) {
             console.log("error", error);
@@ -147,7 +147,7 @@ export const ManageEmployees = () => {
                 rowData={filteredEmp}
                 columnDefs={columns}
                 pagination={true}
-                paginationPageSize={60}
+                paginationPageSize={5}
                 paginationPageSizeSelector={[5, 10, 15, 20]}
                 domLayout='autoHeight'
             />
