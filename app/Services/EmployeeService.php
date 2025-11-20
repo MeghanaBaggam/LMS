@@ -9,14 +9,7 @@ class EmployeeService{
         return User::with(['roles','manager'])->orderBy('name')->get();
     }
     public function createEmployee(array $data){
-        $req->validate([
-            'name'       => 'required',
-            'email'      => 'required|email|unique:users',
-            'password'   => 'required|min:6',
-            'role'       => 'required|in:employee,manager,hr',
-            'manager_id' => 'nullable|exists:users,id',
-        ]);
-
+        
         $user = User::create([
             'name'        => $req->name,
             'email'       => $req->email,
@@ -29,13 +22,7 @@ class EmployeeService{
         return $user;
     }
     public function updateEmployee(User $user,array $data){
-        $req->validate([
-            'name'        => 'sometimes|string',
-            'email'       => 'sometimes|email|unique:users,email,' . $user->id,
-            'role'        => 'sometimes|in:employee,manager,hr',
-            'manager_id'  => 'nullable|exists:users,id',
-            'leave_balance' => 'sometimes|numeric'
-        ]);
+       
 
         $user->update($req->all());
 

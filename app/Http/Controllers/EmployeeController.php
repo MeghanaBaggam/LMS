@@ -4,12 +4,19 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Services\EmployeeServices;
 
 class EmployeeController extends Controller
 {
+    protected EmployeeService $employeeService;
+
+    public function __construct(EmployeeService $employeeService){
+        $this->employeeService=$employeeService;
+    }
     
     public function index(){
-        return User::with(['roles','manager'])->orderBy('name')->get();
+        $employees=$this->employeeService->getAllEmployees();
+        return response()->json($employees);
     }
 
     public function store(Request $req){
@@ -21,22 +28,11 @@ class EmployeeController extends Controller
             'manager_id' => 'nullable|exists:users,id',
         ]);
 
-        $user = User::create([
-            'name'        => $req->name,
-            'email'       => $req->email,
-            'password'    => Hash::make($req->password),
-            'manager_id'  => $req->manager_id,
-            'leave_balance'=> 20,
-        ]);
-
-        $user->assignRole($req->role);
-
-        return response()->json($user, 201);
+        
     }
 
     public function update(Request $req, User $user){
-
-        $req->validate([
+         $req->validate([
             'name'        => 'sometimes|string',
             'email'       => 'sometimes|email|unique:users,email,' . $user->id,
             'role'        => 'sometimes|in:employee,manager,hr',
@@ -44,13 +40,9 @@ class EmployeeController extends Controller
             'leave_balance' => 'sometimes|numeric'
         ]);
 
-        $user->update($req->all());
-
-        return response()->json($user);
     }
 
     public function destroy(User $user){
-        $user->delete();
-        return response()->json(['message' => 'Deleted']);
+       
     }
 }
