@@ -20,29 +20,32 @@ class EmployeeController extends Controller
     }
 
     public function store(Request $req){
-        $req->validate([
+       $validated= $req->validate([
             'name'       => 'required',
             'email'      => 'required|email|unique:users',
             'password'   => 'required|min:6',
             'role'       => 'required|in:employee,manager,hr',
             'manager_id' => 'nullable|exists:users,id',
         ]);
-
+    $user= $this->employeeService->createEmployee($validated);
+    return response()->json($user);
         
     }
 
     public function update(Request $req, User $user){
-         $req->validate([
+       $validated=  $req->validate([
             'name'        => 'sometimes|string',
             'email'       => 'sometimes|email|unique:users,email,' . $user->id,
             'role'        => 'sometimes|in:employee,manager,hr',
             'manager_id'  => 'nullable|exists:users,id',
             'leave_balance' => 'sometimes|numeric'
         ]);
-
+    $user=$this->employeeService->updateEmployee($user,$validated);
+    return response()->json($user);
     }
 
     public function destroy(User $user){
-       
+       $user=$this->employeeService->deleteEmployee($user);
+       return response()->json(['message'=>'Deleted']);
     }
 }
