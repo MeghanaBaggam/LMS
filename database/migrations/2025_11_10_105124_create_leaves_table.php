@@ -12,15 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('leaves', function (Blueprint $table) {
-           $table->id();
-        $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+        $table->id();
+        $table->foreignId('user_id')->constrained('users');
         $table->date('start_date');
         $table->date('end_date');
-         $table->enum('type', ['sick','vacation','casual'])->default('casual');
-         $table->text('reason')->nullable();
+        $table->enum('type', ['sick','vacation','casual'])->default('casual');
+        $table->text('reason')->nullable();
         $table->enum('status', ['pending','approved','rejected'])->default('pending');
         $table->foreignId('approved_by')->nullable()->constrained('users')->onDelete('set null');
-        $table->integer('days')->default(1); // days requested
+        $table->integer('days')->default(1); 
         $table->timestamps();
         });
     }

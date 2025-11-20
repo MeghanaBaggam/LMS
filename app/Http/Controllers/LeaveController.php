@@ -11,7 +11,7 @@ use  Illuminate\Support\Facades\Validator;
 
 class LeaveController extends Controller
 {
-    //employee apply
+   
     public function store(Request $req){
         $req->user()->can('apply-leave')||abort(403,'unauthorized');
         $data=$req->validate([
@@ -25,8 +25,6 @@ class LeaveController extends Controller
        $end=Carbon::parse($data['end_date']);
        $days=$start->diffInDays($end)+1;
 
-
-       //check balance
        if($user->leave_balance<$days){
         return response()->json(['message'=>'Insufficient leave balance'],422);
        }
@@ -60,7 +58,7 @@ class LeaveController extends Controller
         return $user->leaves()->orderByDesc('created_at')->get();
     }
 
-    // Manager/HR: Approve leave
+  
     public function approve(Request $req, Leave $leave)
     {
      $req->user()->can('approve-leave')||abort(403,'unauthorized');
@@ -82,7 +80,7 @@ class LeaveController extends Controller
         return response()->json($leave);
     }
 
-    // Manager/HR: Reject leave
+    
     public function reject(Request $req, Leave $leave)
     {
     $req->user()->can('reject-leave')||abort(403,'unauthorized');

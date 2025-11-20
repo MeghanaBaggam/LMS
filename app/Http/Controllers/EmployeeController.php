@@ -43,27 +43,9 @@ class EmployeeController extends Controller
             'leave_balance' => 'sometimes|numeric'
         ]);
 
-        if ($req->has('name')) {
-            $user->name = $req->name;
-        }
+       
 
-        if ($req->has('email')) {
-            $user->email = $req->email;
-        }
-
-        if ($req->has('manager_id')) {
-            $user->manager_id = $req->manager_id;
-        }
-
-        if ($req->has('leave_balance')) {
-            $user->leave_balance = $req->leave_balance;
-        }
-
-        if ($req->has('role')) {
-            $user->syncRoles([$req->role]);
-        }
-
-        $user->save();
+        $user->update($req->all());
 
         return response()->json($user);
     }

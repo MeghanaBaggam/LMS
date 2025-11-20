@@ -18,7 +18,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->enum('role', ['employee','manager','hr'])->default('employee');
-            $table->unsignedBigInteger('manager_id')->nullable(); // FK to users.id
+            $table->unsignedBigInteger('manager_id')->nullable(); 
             $table->integer('leave_balance')->default(20);
             $table->rememberToken();
             $table->timestamps();

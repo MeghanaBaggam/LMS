@@ -25,8 +25,8 @@ protected $guard_name = 'api';
         'email',
         'password',
         'role',
-     'manager_id',
-     'leave_balance',
+        'manager_id',
+        'leave_balance',
     ];
 
     /**
