@@ -9,10 +9,8 @@ use Spatie\Permission\Models\Permission;
 
 class RoleSeeder extends Seeder
 {
-    
     public function run(): void
     {
-
         $employee=Role::create(["name"=>"employee"]);
         $manager=Role::create(["name"=>"manager"]);
         $hr=Role::create(["name"=>"hr"]);

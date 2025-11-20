@@ -1,18 +1,14 @@
 <?php
-
-namespace App\Http\Controllers;
+namespace App\Services;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
-class EmployeeController extends Controller
-{
-    
-    public function index(){
+class EmployeeService{
+    public function getAllEmployees(){
         return User::with(['roles','manager'])->orderBy('name')->get();
     }
-
-    public function store(Request $req){
+    public function createEmployee(array $data){
         $req->validate([
             'name'       => 'required',
             'email'      => 'required|email|unique:users',
@@ -30,12 +26,9 @@ class EmployeeController extends Controller
         ]);
 
         $user->assignRole($req->role);
-
-        return response()->json($user, 201);
+        return $user;
     }
-
-    public function update(Request $req, User $user){
-
+    public function updateEmployee(User $user,array $data){
         $req->validate([
             'name'        => 'sometimes|string',
             'email'       => 'sometimes|email|unique:users,email,' . $user->id,
@@ -48,9 +41,9 @@ class EmployeeController extends Controller
 
         return response()->json($user);
     }
-
-    public function destroy(User $user){
+    public function deleteEmployee(User $user){
         $user->delete();
-        return response()->json(['message' => 'Deleted']);
     }
+
 }
+
