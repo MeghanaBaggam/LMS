@@ -16,5 +16,8 @@ export const UserService = {
     },
     deleteUser:(id)=>{
         return api.delete(`/users/${id}`);
+    },
+    loginUser:(userData)=>{
+        return api.post("/user/login",userData);
     }
 };
