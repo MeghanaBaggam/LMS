@@ -19,7 +19,6 @@ export const HRDashboard = () => {
   };
   return (
     <div className="hr-container">
-
       <div className="top-right-menu">
         <div className="user-info" onClick={() => setShowMenu(!showMenu)}>
           <div className="avatar-circle">
@@ -67,25 +66,26 @@ export const HRDashboard = () => {
       </h2>
 
       <div className="top-nav">
-        {tabs.map((tab)=>{
-          const canAccess=tab.permission.includes(user?.role);
-          return(
+        {tabs.map((tab) => {
+          const canAccess = tab.permission.includes(user?.role);
+          return (
             <NavLink
-            key={tab.path}
-            to={canAccess ? `/dashboard/${tab.path}`:"#"}
-            className={({isActive})=>
-              !canAccess ? "nav-item disabled-tab" 
-              : isActive 
-              ? "nav-item active-tab"
-              :"nav-item"
-            }
-            onClick={(e)=>{
-              if (!canAccess){
-                e.preventDefault();
+              key={tab.path}
+              to={canAccess ? `/dashboard/${tab.path}` : "#"}
+              className={({ isActive }) =>
+                !canAccess
+                  ? "nav-item disabled-tab"
+                  : isActive
+                  ? "nav-item active-tab"
+                  : "nav-item"
               }
-            }}
+              onClick={(e) => {
+                if (!canAccess) {
+                  e.preventDefault();
+                }
+              }}
             >
-                {tab.label}
+              {tab.label}
             </NavLink>
           );
         })}
