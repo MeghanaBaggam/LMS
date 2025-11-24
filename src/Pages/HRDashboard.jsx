@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
-import { NavLink, Outlet,useNavigate } from "react-router-dom";
-import { Tasks} from "../Config/Tasks";
-import Permissions from "../Config/Permissions";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import tabs from "../Config/Tabs";
 
 export const HRDashboard = () => {
   const [showMenu, setShowMenu] = useState(false);
@@ -11,8 +10,8 @@ export const HRDashboard = () => {
   const navigate = useNavigate();
 
   const user = JSON.parse(localStorage.getItem("user"));
-  const role=user?.role;
-  const allowedTabs=Permissions[role]||[];
+  const role = user?.role;
+
   const logoutUser = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -20,6 +19,7 @@ export const HRDashboard = () => {
   };
   return (
     <div className="hr-container">
+
       <div className="top-right-menu">
         <div className="user-info" onClick={() => setShowMenu(!showMenu)}>
           <div className="avatar-circle">
@@ -62,25 +62,35 @@ export const HRDashboard = () => {
         </div>
       )}
 
-      <h2 className="welcome-text">Welcome {role?.toUpperCase()} {user?.name}!</h2>
+      <h2 className="welcome-text">
+        Welcome {role?.toUpperCase()} {user?.name}!
+      </h2>
 
       <div className="top-nav">
-       {Tasks.map((tab)=>{
-        const isAllowed =allowedTabs.includes(tab.path);
-        return(
-          <NavLink
-          key={tab.path}
-          to={isAllowed ?tab.path:""}
-          className={
-            isAllowed ? ({isActive})=>(isActive ? "nav-item active-tab":"nav-item"):"nav-item disabled-tab"
-          }>
-            {tab.label}
-          </NavLink>
-        );
-       })}
-       
+        {tabs.map((tab)=>{
+          const canAccess=tab.permission.includes(role);
+          return(
+            <NavLink
+            key={tab.path}
+            to={canAccess ? tab.path:"#"}
+            className={({isActive})=>
+              !canAccess ? "nav-item disabled-tab" 
+              : isActive 
+              ? "nav-item active-tab"
+              :"nav-item"
+            }
+            onClick={(e)=>{
+              if (!canAccess){
+                e.preventDefault();
+              }
+            }}
+            >
+                {tab.label}
+            </NavLink>
+          );
+        })}
       </div>
-        <Outlet />
+      <Outlet />
     </div>
   );
 };
