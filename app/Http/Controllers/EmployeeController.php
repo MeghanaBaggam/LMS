@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use App\Services\EmployeeServices;
+use App\Services\EmployeeService;
 
 class EmployeeController extends Controller
 {
-    protected EmployeeService $employeeService;
+    protected  $employeeService;
 
     public function __construct(EmployeeService $employeeService){
         $this->employeeService=$employeeService;
