@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { UserService } from "../Services/userService";
+import { UserService } from "../Services/UserService";
 import { AgGridReact } from "ag-grid-react";
 import {
   ModuleRegistry,

@@ -1,161 +1,166 @@
 import React, { useState } from "react";
-import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import axios from "axios";
+import { UserService } from "../Services/UserService";
 
-const RequestLeave = ({ onClose }) => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  const token = localStorage.getItem("token");
+const RequestLeave = () => {
+  const [showModal, setShowModal] = useState(true);
 
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [mode, setMode] = useState("full"); // full / custom
-  const [startHalf, setStartHalf] = useState("full"); // first / second / full
-  const [endHalf, setEndHalf] = useState("full");
-  const [leaveType, setLeaveType] = useState("");
-  const [reason, setReason] = useState("");
+  const [form, setForm] = useState({
+    start_date: "",
+    end_date: "",
+    mode: "full",
+    start_half: "full",
+    end_half: "full",
+    type: "",
+    reason: "",
+  });
 
-  // Calculate leave days
   const calculateDays = () => {
-    if (!startDate || !endDate) return 0;
+    if (!form.start_date || !form.end_date) return 0;
 
-    const start = new Date(startDate);
-    const end = new Date(endDate);
+    const start = new Date(form.start_date);
+    const end = new Date(form.end_date);
 
     let days = (end - start) / (1000 * 60 * 60 * 24) + 1;
 
-    // Custom half-days logic
-    if (mode === "custom") {
-      if (startHalf === "second") days -= 0.5;
-      if (endHalf === "first") days -= 0.5;
+    if (form.mode === "custom") {
+      if (form.start_half === "second") days -= 0.5;
+      if (form.end_half === "first") days -= 0.5;
     }
 
     return days;
   };
 
-  const submitLeave = async () => {
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const submitLeave = async (e) => {
+    e.preventDefault();
+
     try {
       const days = calculateDays();
 
-      await axios.post(
-        "http://127.0.0.1:8000/api/leaves",
-        {
-          start_date: startDate,
-          end_date: endDate,
-          type: leaveType,
-          reason,
-          days,
-          mode,
-          start_half: startHalf,
-          end_half: endHalf,
-        },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await UserService.createLeave({
+        start_date: form.start_date,
+        end_date: form.end_date,
+        type: form.type,
+        reason: form.reason,
+        days: days,
+        mode: form.mode,
+        start_half: form.start_half,
+        end_half: form.end_half,
+      });
 
       alert("Leave Request Submitted!");
-      onClose();
+      setShowModal(false); // CLOSE MODAL
     } catch (error) {
       console.log("Leave Request Error:", error);
       alert("Error submitting leave request");
     }
   };
 
+  if (!showModal) return null;
+
   return (
     <div className="leave-modal">
       <div className="leave-modal-content">
         <div className="leave-modal-header">
           <h2>Request Leave</h2>
-          <button className="close-btn" onClick={onClose}>
+          <button className="close-btn" onClick={() => setShowModal(false)}>
             ✖
           </button>
         </div>
 
-        {/* Date Selection */}
-        <label>Select Dates</label>
-        <input
-          type="date"
-          className="leave-input"
-          onChange={(e) => setStartDate(e.target.value)}
-        />
-        <input
-          type="date"
-          className="leave-input"
-          onChange={(e) => setEndDate(e.target.value)}
-        />
+        <form onSubmit={submitLeave}>
+          <label>Select Dates</label>
 
-        {/* Buttons */}
-        <div className="day-type-btns">
-          <button
-            className={mode === "full" ? "active-leave-btn" : ""}
-            onClick={() => setMode("full")}
-          >
-            Full Days
-          </button>
+          <input
+            type="date"
+            name="start_date"
+            className="leave-input"
+            onChange={handleChange}
+          />
 
-          <button
-            className={mode === "custom" ? "active-leave-btn" : ""}
-            onClick={() => setMode("custom")}
-          >
-            Custom
-          </button>
-        </div>
+          <input
+            type="date"
+            name="end_date"
+            className="leave-input"
+            onChange={handleChange}
+          />
 
-        {/* Custom Half-Day UI */}
-        {mode === "custom" && (
-          <div className="custom-container">
-            <div>
-              <label>{startDate}</label>
-              <select
-                className="custom-select"
-                onChange={(e) => setStartHalf(e.target.value)}
-              >
-                <option value="first">First Half</option>
-                <option value="second">Second Half</option>
-                <option value="full">Full Day</option>
-              </select>
-            </div>
+          <div className="day-type-btns">
+            <button
+              type="button"
+              className={form.mode === "full" ? "active-leave-btn" : ""}
+              onClick={() => setForm({ ...form, mode: "full" })}
+            >
+              Full Days
+            </button>
 
-            <div>
-              <label>{endDate}</label>
-              <select
-                className="custom-select"
-                onChange={(e) => setEndHalf(e.target.value)}
-              >
-                <option value="first">First Half</option>
-                <option value="second">Second Half</option>
-                <option value="full">Full Day</option>
-              </select>
-            </div>
+            <button
+              type="button"
+              className={form.mode === "custom" ? "active-leave-btn" : ""}
+              onClick={() => setForm({ ...form, mode: "custom" })}
+            >
+              Custom
+            </button>
           </div>
-        )}
 
-        <p style={{ marginTop: "10px" }}>
-          <strong>{calculateDays()}</strong> day(s) requested
-        </p>
+          {form.mode === "custom" && (
+            <div className="custom-container">
+              <div>
+                <label>{form.start_date}</label>
+                <select
+                  name="start_half"
+                  className="custom-select"
+                  onChange={handleChange}
+                >
+                  <option value="first">First Half</option>
+                  <option value="second">Second Half</option>
+                  <option value="full">Full Day</option>
+                </select>
+              </div>
 
-        {/* Leave Type */}
-        <label>Leave Type</label>
-        <select
-          className="leave-input"
-          onChange={(e) => setLeaveType(e.target.value)}
-        >
-          <option value="">Select Type</option>
-          <option value="paid">Paid Leave</option>
-          <option value="sick">Sick Leave</option>
-          <option value="unpaid">Unpaid Leave</option>
-        </select>
+              <div>
+                <label>{form.end_date}</label>
+                <select
+                  name="end_half"
+                  className="custom-select"
+                  onChange={handleChange}
+                >
+                  <option value="first">First Half</option>
+                  <option value="second">Second Half</option>
+                  <option value="full">Full Day</option>
+                </select>
+              </div>
+            </div>
+          )}
 
-        {/* Reason */}
-        <label>Reason</label>
-        <textarea
-          className="leave-textarea"
-          placeholder="Enter reason"
-          onChange={(e) => setReason(e.target.value)}
-        />
+          <p style={{ marginTop: "10px" }}>
+            <strong>{calculateDays()}</strong> day(s) requested
+          </p>
 
-        <button className="submit-leave-btn" onClick={submitLeave}>
-          Submit Request
-        </button>
+          <label>Leave Type</label>
+          <select name="type" className="leave-input" onChange={handleChange}>
+            <option value="">Select Type</option>
+            <option value="sick">Sick Leave</option>
+            <option value="vacation">Vacation Leave</option>
+            <option value="casual">Casual Leave</option>
+          </select>
+
+          <label>Reason</label>
+          <textarea
+            name="reason"
+            className="leave-textarea"
+            placeholder="Enter reason"
+            onChange={handleChange}
+          />
+
+          <button className="submit-leave-btn" type="submit">
+            Submit Request
+          </button>
+        </form>
       </div>
     </div>
   );
