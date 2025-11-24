@@ -68,11 +68,11 @@ export const HRDashboard = () => {
 
       <div className="top-nav">
         {tabs.map((tab)=>{
-          const canAccess=tab.permission.includes(role);
+          const canAccess=tab.permission.includes(user?.role);
           return(
             <NavLink
             key={tab.path}
-            to={canAccess ? tab.path:"#"}
+            to={canAccess ? `/dashboard/${tab.path}`:"#"}
             className={({isActive})=>
               !canAccess ? "nav-item disabled-tab" 
               : isActive 

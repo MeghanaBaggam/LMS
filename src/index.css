@@ -147,6 +147,11 @@
   padding: 12px;
   border-bottom: 1px solid #eee;
 }
+.disabled-tab {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
 
 /* Buttons */
 .edit-btn,

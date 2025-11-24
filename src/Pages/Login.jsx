@@ -31,14 +31,8 @@ export const Login = () => {
 
       setMessage("Login Successful!!");
 
-      if (role === "hr") {
-        navigate("/hr");
-      }
-      if (role === "manager") {
-        navigate("/manager");
-      }
-      if (role === "employee") {
-        navigate("/employee");
+      if (role === "hr" || role === "manager" || role === "employee") {
+        navigate("/dashboard/leave-balance");
       }
     } catch (error) {
       setMessage("Invalid Credentials");
