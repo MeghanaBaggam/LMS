@@ -23,7 +23,7 @@ export const TeamDetails = () => {
   const filterdTeam = team
     .filter((emp) => emp.name.toLowerCase().includes(search.toLowerCase()))
     .filter((emp) => (roleFilter ? emp.role === roleFilter : true));
-    
+
   const finalList = selectedManager
     ? team.filter((emp) => emp.manager_id === selectedManager.id)
     : filterdTeam;
