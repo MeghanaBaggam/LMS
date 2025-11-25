@@ -39,17 +39,6 @@ class User extends Authenticatable implements JWTSubject
         ];
     }
 
-   // Sync DB role column with Spatie roles
-    protected static function booted()
-    {
-        static::saved(function ($user) {
-            if ($user->roles()->exists()) {
-                $user->role = $user->roles->first()->name;
-                $user->saveQuietly();
-            }
-        });
-    }
-
     public function manager()
     {
         return $this->belongsTo(User::class, 'manager_id');
