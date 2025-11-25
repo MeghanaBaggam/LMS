@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import { UserService } from "../Services/UserService";
 
@@ -10,30 +10,37 @@ export const TeamDetails = () => {
     selectedManager: null,
   });
 
-  const updateState = (updates) =>
+  const updateState = useCallback((updates) => {
     setState((prev) => ({ ...prev, ...updates }));
+  }, []);
 
-  const fetchEmp = async () => {
+  const fetchEmp = useCallback(async () => {
     try {
       const response = await UserService.getAllUsers();
       updateState({ team: response.data });
     } catch (error) {
       console.log("Fetch Error", error);
     }
-  };
+  }, [updateState]);
   useEffect(() => {
     fetchEmp();
-  }, []);
+  }, [fetchEmp]);
 
-  const filterdTeam = state.team
-    .filter((emp) =>
-      emp.name.toLowerCase().includes(state.search.toLowerCase())
-    )
-    .filter((emp) => (state.roleFilter ? emp.role === state.roleFilter : true));
+  const filterdTeam = useMemo(() => {
+    return state.team
+      .filter((emp) =>
+        emp.name.toLowerCase().includes(state.search.toLowerCase())
+      )
+      .filter((emp) =>
+        state.roleFilter ? emp.role === state.roleFilter : true
+      );
+  }, [state.team, state.search, state.roleFilter]);
 
-  const finalList = state.selectedManager
-    ? state.team.filter((emp) => emp.manager_id === state.selectedManager.id)
-    : filterdTeam;
+  const finalList = useMemo(() => {
+    return state.selectedManager
+      ? state.team.filter((emp) => emp.manager_id === state.selectedManager.id)
+      : filterdTeam;
+  }, [state.selectedManager, state.team, filterdTeam]);
   return (
     <div className="team-details-container">
       <div className="team-header-row">
