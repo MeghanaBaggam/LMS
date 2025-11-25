@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { UserService } from "../Services/UserService";
 import { AgGridReact } from "ag-grid-react";
 import {
@@ -26,23 +26,25 @@ export const ManageEmployees = () => {
   const [formData, setformData] = useState(initialFormState);
   const [editId, setEditId] = useState(null);
 
-  const handleFormData = (e) => {
+  const handleFormData = useCallback((e) => {
     const { name, value } = e.target;
     setformData((prevData) => ({ ...prevData, [name]: value }));
-  };
-  const fetchEmp = async () => {
+  });
+
+  const fetchEmp = useCallback(async () => {
     try {
       const response = await UserService.getAllUsers();
       setEmployees(response.data);
     } catch (error) {
       console.log("Error fetching data", error);
     }
-  };
-  useEffect(() => {
-    fetchEmp();
   }, []);
 
-  const addEmp = async () => {
+  useEffect(() => {
+    fetchEmp();
+  }, [fetchEmp]);
+
+  const addEmp = useCallback(async () => {
     try {
       console.log(formData.role);
       await UserService.createUser({
@@ -58,9 +60,9 @@ export const ManageEmployees = () => {
     } catch (error) {
       console.log("Add Error", error);
     }
-  };
+  }, [formData, fetchEmp]);
 
-  const updateEmp = async () => {
+  const updateEmp = useCallback(async () => {
     try {
       await UserService.updateUser(editId, {
         name: formData.name,
@@ -76,20 +78,24 @@ export const ManageEmployees = () => {
     } catch (error) {
       console.log("Update Error:", error);
     }
-  };
+  }, [editId, fetchEmp, formData]);
 
-  const deleteEmp = async (id) => {
-    if (!window.confirm("Are You sure you want to delete this employee?"))
-      return;
+  const deleteEmp = useCallback(
+    async (id) => {
+      if (!window.confirm("Are You sure you want to delete this employee?"))
+        return;
 
-    try {
-      await UserService.deleteUser(id);
-      fetchEmp();
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-  const handleEditClick = (data) => {
+      try {
+        await UserService.deleteUser(id);
+        fetchEmp();
+      } catch (error) {
+        console.log("error", error);
+      }
+    },
+    [fetchEmp]
+  );
+
+  const handleEditClick = useCallback((data) => {
     setShowEdit(true);
     setEditId(data.id);
     setformData({
@@ -99,45 +105,55 @@ export const ManageEmployees = () => {
       role: data.role,
       managerId: data.manager_id || "",
     });
-    setShowEdit(true);
-  };
+  }, []);
 
-  const columns = [
-    { headerName: "ID", field: "id", sortable: true, filter: true, width: 250 },
-    { headerName: "Name", field: "name", sortable: true, filter: true },
-    { headerName: "Email", field: "email" },
-    { headerName: "Roles", field: "role", sortable: true },
-    { headerName: "Manager", field: "manager.name" },
-    { headerName: "Manager ID", field: "manager_id" },
-    {
-      headerName: "Actions",
-      field: "actions",
-      width: 200,
-      cellRenderer: (params) => (
-        <div>
-          <button
-            className="edit-btn"
-            onClick={() => {
-              handleEditClick(params.data);
-            }}
-          >
-            Edit
-          </button>
+  const columns = useMemo(
+    () => [
+      {
+        headerName: "ID",
+        field: "id",
+        sortable: true,
+        filter: true,
+        width: 250,
+      },
+      { headerName: "Name", field: "name", sortable: true, filter: true },
+      { headerName: "Email", field: "email" },
+      { headerName: "Role", field: "role", sortable: true },
+      { headerName: "Manager", field: "manager.name" },
+      { headerName: "Manager ID", field: "manager_id" },
+      {
+        headerName: "Actions",
+        field: "actions",
+        width: 200,
+        cellRenderer: (params) => (
+          <div>
+            <button
+              className="edit-btn"
+              onClick={() => {
+                handleEditClick(params.data);
+              }}
+            >
+              Edit
+            </button>
 
-          <button
-            className="delete-btn"
-            onClick={() => deleteEmp(params.data.id)}
-          >
-            Delete
-          </button>
-        </div>
-      ),
-    },
-  ];
+            <button
+              className="delete-btn"
+              onClick={() => deleteEmp(params.data.id)}
+            >
+              Delete
+            </button>
+          </div>
+        ),
+      },
+    ],
+    [handleEditClick, deleteEmp]
+  );
 
-  const filteredEmp = employees
-    .filter((emp) => emp.name.toLowerCase().includes(search.toLowerCase()))
-    .filter((emp) => (roleFilter ? emp.role === roleFilter : true));
+  const filteredEmp = useMemo(() => {
+    return employees
+      .filter((emp) => emp.name.toLowerCase().includes(search.toLowerCase()))
+      .filter((emp) => (roleFilter ? emp.role === roleFilter : true));
+  }, [employees, search, roleFilter]);
 
   return (
     <>
