@@ -1,8 +1,7 @@
 import api from './api';
 
 export const UserService = {
-
-    getAllUsers:()=>{
+    getUsers:()=>{
         return api.get("/users");
     },
 
@@ -25,9 +24,8 @@ export const UserService = {
     getLeaves: () => {
         return api.get("/leaves");
     },
-
-    approveLeave: (leaveId) => {
-        return api.post(`/leaves/${leaveId}/approve`);
+    approveLeave: (leaveId,data) => {
+        return api.post(`/leaves/${leaveId}/approve`,data);
     },
 
     rejectLeave: (leaveId, reason) => {
