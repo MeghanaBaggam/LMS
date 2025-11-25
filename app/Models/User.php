@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -11,15 +10,10 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements JWTSubject
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory,HasRoles, Notifiable;
-     
-protected $guard_name = 'api';
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
+    use HasFactory, HasRoles, Notifiable;
+
+    protected $guard_name = 'api';
+
     protected $fillable = [
         'name',
         'email',
@@ -29,11 +23,6 @@ protected $guard_name = 'api';
         'leave_balance',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'two_factor_secret',
@@ -41,11 +30,6 @@ protected $guard_name = 'api';
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -53,33 +37,46 @@ protected $guard_name = 'api';
             'password' => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
         ];
-
     }
+
+   // Sync DB role column with Spatie roles
+    protected static function booted()
+    {
+        static::saved(function ($user) {
+            if ($user->roles()->exists()) {
+                $user->role = $user->roles->first()->name;
+                $user->saveQuietly();
+            }
+        });
+    }
+
     public function manager()
-{
-    return $this->belongsTo(User::class, 'manager_id');
-}
+    {
+        return $this->belongsTo(User::class, 'manager_id');
+    }
 
-public function teamMembers()
-{
-    return $this->hasMany(User::class, 'manager_id');
-}
+    public function teamMembers()
+    {
+        return $this->hasMany(User::class, 'manager_id');
+    }
 
+    public function leaves()
+    {
+        return $this->hasMany(Leave::class, 'user_id');
+    }
 
-public function leaves()
-{
-    return $this->hasMany(Leave::class, 'user_id');
-}
+    public function approvedLeaves()
+    {
+        return $this->hasMany(Leave::class, 'approved_by');
+    }
 
-public function approvedLeaves()
-{
-    return $this->hasMany(Leave::class, 'approved_by');
-}
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
 
-public function getJWTIdentifier(){
-    return $this->getKey();
-}
-public function getJWTCustomClaims(){
-    return [];
-}
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
 }
