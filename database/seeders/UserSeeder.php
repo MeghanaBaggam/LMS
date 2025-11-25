@@ -10,7 +10,6 @@ class UserSeeder extends Seeder
 {
     public function run()
     {
-        // HR
         $hr = User::firstOrCreate(
             ['email' => 'shyampalreddy@pal.tech'],
             [
@@ -22,7 +21,7 @@ class UserSeeder extends Seeder
         );
         $hr->assignRole('hr');
 
-        // Manager
+       
         $manager = User::firstOrCreate(
             ['email' => 'suresh@pal.tech'],
             [
@@ -34,7 +33,7 @@ class UserSeeder extends Seeder
         );
         $manager->assignRole('manager');
 
-        // Employee
+    
         $employee = User::firstOrCreate(
             ['email' => 'meghanabaggam@pal.tech'],
             [

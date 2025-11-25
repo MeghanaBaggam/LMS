@@ -15,7 +15,7 @@ class EmployeeService{
             'name'          => $data['name'],
             'email'         => $data['email'],
             'password'      => Hash::make($data['password']),
-            'role'          =>$data['role'], 
+            'role'          =>$data['role'] ,
             'manager_id'    => $data['manager_id'] ?? null,
             'leave_balance' => 20,
         ]);
