@@ -3,6 +3,7 @@ namespace App\Services;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Hash;
 
 class EmployeeService{
     public function getAllEmployees(){
@@ -11,20 +12,20 @@ class EmployeeService{
     public function createEmployee(array $data){
         
         $user = User::create([
-            'name'        => $req->name,
-            'email'       => $req->email,
-            'password'    => Hash::make($req->password),
-            'manager_id'  => $req->manager_id,
-            'leave_balance'=> 20,
+            'name'          => $data['name'],
+            'email'         => $data['email'],
+            'password'      => Hash::make($data['password']),
+            'manager_id'    => $data['manager_id'] ?? null,
+            'leave_balance' => 20,
         ]);
 
-        $user->assignRole($req->role);
+         $user->syncRoles([$data['role']]);
         return $user;
     }
     public function updateEmployee(User $user,array $data){
        
 
-        $user->update($req->all());
+        $user->update($data);
 
         return response()->json($user);
     }
