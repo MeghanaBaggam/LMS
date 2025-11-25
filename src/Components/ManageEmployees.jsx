@@ -17,20 +17,21 @@ const initialFormState = {
 };
 export const ManageEmployees = () => {
   const [employees, setEmployees] = useState([]);
-  const [state,setState]=useState({
-  search: "",
-  roleFilter: "",
-  showAdd: false,
-  showEdit: false,
-  formData: initialFormState,
-  editId: null,
+  const [state, setState] = useState({
+    search: "",
+    roleFilter: "",
+    showAdd: false,
+    showEdit: false,
+    formData: initialFormState,
+    editId: null,
   });
-  
- const updateState = (updates) => setState((prev) => ({ ...prev, ...updates }));
+
+  const updateState = (updates) =>
+    setState((prev) => ({ ...prev, ...updates }));
 
   const handleFormData = useCallback((e) => {
     const { name, value } = e.target;
-    updateState({formData:{...state.formData,[name]:value}});
+    updateState({ formData: { ...state.formData, [name]: value } });
   });
 
   const fetchEmp = useCallback(async () => {
@@ -46,10 +47,8 @@ export const ManageEmployees = () => {
     fetchEmp();
   }, [fetchEmp]);
 
-
   const addEmp = useCallback(async () => {
     try {
-      
       await UserService.createUser({
         name: state.formData.name,
         email: state.formData.email,
@@ -58,13 +57,12 @@ export const ManageEmployees = () => {
         manager_id: state.formData.managerId,
       });
       fetchEmp();
-     updateState({showAdd:false})
-      updateState({formData:initialFormState});
+      updateState({ showAdd: false });
+      updateState({ formData: initialFormState });
     } catch (error) {
       console.log("Add Error", error);
     }
   }, [state.formData, fetchEmp]);
-
 
   const updateEmp = useCallback(async () => {
     try {
@@ -76,9 +74,9 @@ export const ManageEmployees = () => {
       });
 
       fetchEmp();
-     updateState({showEdit:false})
-     updateState({formData:initialFormState})
-      updateState({editId:null})
+      updateState({ showEdit: false });
+      updateState({ formData: initialFormState });
+      updateState({ editId: null });
     } catch (error) {
       console.log("Update Error:", error);
     }
@@ -100,15 +98,17 @@ export const ManageEmployees = () => {
   );
 
   const handleEditClick = useCallback((data) => {
-   updateState({showEdit:true})
-   updateState({editId:data.id})
-   updateState({formData:{
-      name: data.name,
-      email: data.email,
-      password: "",
-      role: data.role,
-      managerId: data.manager_id || "",
-    }});
+    updateState({ showEdit: true });
+    updateState({ editId: data.id });
+    updateState({
+      formData: {
+        name: data.name,
+        email: data.email,
+        password: "",
+        role: data.role,
+        managerId: data.manager_id || "",
+      },
+    });
   }, []);
 
   const columns = useMemo(
@@ -155,7 +155,9 @@ export const ManageEmployees = () => {
 
   const filteredEmp = useMemo(() => {
     return employees
-      .filter((emp) => emp.name.toLowerCase().includes(state.search.toLowerCase()))
+      .filter((emp) =>
+        emp.name.toLowerCase().includes(state.search.toLowerCase())
+      )
       .filter((emp) => (state.roleFilter ? emp.role === roleFilter : true));
   }, [employees, state.search, state.roleFilter]);
 
@@ -166,11 +168,11 @@ export const ManageEmployees = () => {
           type="text"
           placeholder="Search Employee"
           className="search-input"
-          onChange={(e) => updateState({search:e.target.value})}
+          onChange={(e) => updateState({ search: e.target.value })}
         />
         <select
           className="role-select"
-          onChange={(e) => updateState({roleFilter:e.target.value})}
+          onChange={(e) => updateState({ roleFilter: e.target.value })}
         >
           <option value="">All Roles</option>
           <option value="employee">Employee</option>
@@ -180,10 +182,10 @@ export const ManageEmployees = () => {
         <button
           className="add-employee-btn"
           onClick={() => {
-           updateState({
-            showAdd:true,
-            formData:initialFormState
-           })
+            updateState({
+              showAdd: true,
+              formData: initialFormState,
+            });
           }}
         >
           Add New Employee
@@ -225,7 +227,11 @@ export const ManageEmployees = () => {
               onChange={handleFormData}
             />
 
-            <select name="role" value={state.formData.role} onChange={handleFormData}>
+            <select
+              name="role"
+              value={state.formData.role}
+              onChange={handleFormData}
+            >
               <option value="">Select Role</option>
               <option value="hr">HR</option>
               <option value="manager">Manager</option>

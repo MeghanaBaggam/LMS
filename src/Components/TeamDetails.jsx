@@ -3,15 +3,20 @@ import { FaUserCircle } from "react-icons/fa";
 import { UserService } from "../Services/UserService";
 
 export const TeamDetails = () => {
-  const [team, setTeam] = useState([]);
-  const [search, setSearch] = useState("");
-  const [roleFilter, setRoleFilter] = useState("");
-  const [selectedManager, setSelectedManager] = useState(null);
+  const [state, setState] = useState({
+    team: [],
+    search: "",
+    roleFilter: "",
+    selectedManager: null,
+  });
+
+  const updateState = (updates) =>
+    setState((prev) => ({ ...prev, ...updates }));
 
   const fetchEmp = async () => {
     try {
       const response = await UserService.getAllUsers();
-      setTeam(response.data);
+      updateState({ team: response.data });
     } catch (error) {
       console.log("Fetch Error", error);
     }
@@ -20,26 +25,28 @@ export const TeamDetails = () => {
     fetchEmp();
   }, []);
 
-  const filterdTeam = team
-    .filter((emp) => emp.name.toLowerCase().includes(search.toLowerCase()))
-    .filter((emp) => (roleFilter ? emp.role === roleFilter : true));
+  const filterdTeam = state.team
+    .filter((emp) =>
+      emp.name.toLowerCase().includes(state.search.toLowerCase())
+    )
+    .filter((emp) => (state.roleFilter ? emp.role === state.roleFilter : true));
 
-  const finalList = selectedManager
-    ? team.filter((emp) => emp.manager_id === selectedManager.id)
+  const finalList = state.selectedManager
+    ? state.team.filter((emp) => emp.manager_id === state.selectedManager.id)
     : filterdTeam;
   return (
     <div className="team-details-container">
       <div className="team-header-row">
         <h2 className="employee-list-title">
-          {selectedManager
-            ? `${selectedManager.name}'s Team`
+          {state.selectedManager
+            ? `${state.selectedManager.name}'s Team`
             : "Employees List"}
         </h2>
         <div className="team-filters">
-          {selectedManager && (
+          {state.selectedManager && (
             <button
               className="back-btn"
-              onClick={() => setSelectedManager(null)}
+              onClick={() => updateState({ selectedManager: null })}
             >
               Back
             </button>
@@ -48,13 +55,13 @@ export const TeamDetails = () => {
             type="text"
             placeholder="Search Employee"
             className="search-input"
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => updateState({ search: e.target.value })}
           />
           <select
             className="role-select"
             onChange={(e) => {
-              setRoleFilter(e.target.value);
-              setSelectedManager(null);
+              updateState({ roleFilter: e.target.value });
+              updateState({ selectedManager: null });
             }}
           >
             <option value="">All Roles</option>
@@ -72,7 +79,7 @@ export const TeamDetails = () => {
             key={emp.id}
             onClick={() => {
               if (emp.role === "manager") {
-                setSelectedManager(emp);
+                updateState({ selectedManager: emp });
               }
             }}
             style={{ cursor: emp.role === "manager" ? "pointer" : "default" }}
