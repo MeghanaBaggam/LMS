@@ -44,6 +44,7 @@ export const ManageEmployees = () => {
 
   const addEmp = async () => {
     try {
+      console.log(formData.role);
       await UserService.createUser({
         name: formData.name,
         email: formData.email,
@@ -245,7 +246,11 @@ export const ManageEmployees = () => {
               onChange={handleFormData}
             />
 
-            <select name="role" value={formData.role} onChange={handleFormData}>
+            <select
+              name="role"
+              value={formData.role || ""}
+              onChange={handleFormData}
+            >
               <option value="hr">HR</option>
               <option value="manager">Manager</option>
               <option value="employee">Employee</option>

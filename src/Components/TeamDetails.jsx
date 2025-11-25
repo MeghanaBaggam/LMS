@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
-import { UserService } from "../Services/userService";
+import { UserService } from "../Services/UserService";
 
 export const TeamDetails = () => {
   const [team, setTeam] = useState([]);

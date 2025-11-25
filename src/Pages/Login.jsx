@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import paltechLogo from "../Images/logo.jpg";
 import bg from "../Images/paltech.jpg";
-import { UserService } from "../Services/userService";
+import { UserService } from "../Services/UserService";
 
 const initialFormState = {
   email: "",

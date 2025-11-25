@@ -1,4 +1,3 @@
-import React from "react";
 const tabs = [
   { path: "leave-balance", label: "Leave Balance", permission: ["hr", "manager", "employee"] },
   { path: "leave-requests", label: "Leave Requests", permission: ["hr", "manager", "employee"] },

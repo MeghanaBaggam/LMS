@@ -40,3 +40,66 @@
 .read-the-docs {
   color: #888;
 }
+.leave-requests-container {
+  padding: 30px 50px;
+}
+ 
+.leave-title {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #444;
+}
+ 
+.leave-filter-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+ 
+.leave-filter-select {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+ 
+.request-leave-btn {
+  background: #7e1a3a;
+  color: white;
+  padding: 8px 18px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+ 
+.leave-history-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+ 
+.leave-history-table th,
+.leave-history-table td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+ 
+.leave-history-table th {
+  background: #f7f0f5;
+  font-weight: 600;
+}
+ 
+.actions-col {
+  text-align: center;
+}
+ 
+.cancel-btn {
+  background: #c0392b;
+  color: white;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}

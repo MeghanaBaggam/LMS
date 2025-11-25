@@ -3,7 +3,7 @@ import "react-calendar/dist/Calendar.css";
 import { UserService } from "../Services/UserService";
 
 const RequestLeave = () => {
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModel] = useState(true);
 
   const [form, setForm] = useState({
     start_date: "",
@@ -53,7 +53,7 @@ const RequestLeave = () => {
       });
 
       alert("Leave Request Submitted!");
-      setShowModal(false); // CLOSE MODAL
+      setShowModel(false);
     } catch (error) {
       console.log("Leave Request Error:", error);
       alert("Error submitting leave request");
@@ -67,8 +67,8 @@ const RequestLeave = () => {
       <div className="leave-modal-content">
         <div className="leave-modal-header">
           <h2>Request Leave</h2>
-          <button className="close-btn" onClick={() => setShowModal(false)}>
-            ✖
+          <button className="close-btn" onClick={() => setShowModel(false)}>
+            Close
           </button>
         </div>
 
@@ -137,8 +137,8 @@ const RequestLeave = () => {
             </div>
           )}
 
-          <p style={{ marginTop: "10px" }}>
-            <strong>{calculateDays()}</strong> day(s) requested
+          <p>
+            <strong>{calculateDays()}</strong> days requested
           </p>
 
           <label>Leave Type</label>
