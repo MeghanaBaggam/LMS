@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { UserService } from "../Services/UserService";
 import { AgGridReact } from "ag-grid-react";
+import { fetchEmp } from "../store/EmployeeSlice";
 import {
   ModuleRegistry,
   AllCommunityModule,
   themeQuartz,
 } from "ag-grid-community";
+import { useDispatch, useSelector } from "react-redux";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 const initialFormState = {
@@ -16,7 +18,10 @@ const initialFormState = {
   managerId: "",
 };
 export const ManageEmployees = () => {
-  const [employees, setEmployees] = useState([]);
+ const dispatch=useDispatch();
+ const employees=useSelector((state)=>state.employees.list);
+ const loading=useSelector((state)=>state.employees.loading);
+ const error=useSelector((state)=>state.employees.error);
   const [state, setState] = useState({
     search: "",
     roleFilter: "",
@@ -33,19 +38,10 @@ export const ManageEmployees = () => {
     const { name, value } = e.target;
     updateState({ formData: { ...state.formData, [name]: value } });
   });
-
-  const fetchEmp = useCallback(async () => {
-    try {
-      const response = await UserService.getAllUsers();
-      setEmployees(response.data);
-    } catch (error) {
-      console.log("Error fetching data", error);
-    }
-  }, []);
-
+//fetch employees from the redux  
   useEffect(() => {
-    fetchEmp();
-  }, [fetchEmp]);
+    dispatch(fetchEmp());
+  }, [dispatch]);
 
   const addEmp = useCallback(async () => {
     try {
@@ -56,13 +52,12 @@ export const ManageEmployees = () => {
         role: state.formData.role,
         manager_id: state.formData.managerId,
       });
-      fetchEmp();
-      updateState({ showAdd: false });
-      updateState({ formData: initialFormState });
+      dispatch(fetchEmp());
+      updateState({ showAdd: false,formData: initialFormState });
     } catch (error) {
       console.log("Add Error", error);
     }
-  }, [state.formData, fetchEmp]);
+  }, [state.formData, dispatch]);
 
   const updateEmp = useCallback(async () => {
     try {
@@ -72,43 +67,39 @@ export const ManageEmployees = () => {
         role: state.formData.role,
         manager_id: state.formData.managerId,
       });
-
-      fetchEmp();
-      updateState({ showEdit: false });
-      updateState({ formData: initialFormState });
-      updateState({ editId: null });
+      dispatch(fetchEmp());
+      updateState({ showEdit: false,formData: initialFormState ,editId: null });
     } catch (error) {
       console.log("Update Error:", error);
     }
-  }, [state.editId, fetchEmp, state.formData]);
+  }, [state.editId, dispatch, state.formData]);
 
   const deleteEmp = useCallback(
     async (id) => {
       if (!window.confirm("Are You sure you want to delete this employee?"))
         return;
-
       try {
         await UserService.deleteUser(id);
-        fetchEmp();
+        dispatch(fetchEmp());
       } catch (error) {
         console.log("error", error);
       }
     },
-    [fetchEmp]
+    [dispatch]
   );
 
   const handleEditClick = useCallback((data) => {
-    updateState({ showEdit: true });
-    updateState({ editId: data.id });
-    updateState({
-      formData: {
+    updateState({ 
+    showEdit: true,
+    editId: data.id,
+    formData: {
         name: data.name,
         email: data.email,
         password: "",
         role: data.role,
         managerId: data.manager_id || "",
       },
-    });
+   });
   }, []);
 
   const columns = useMemo(
