@@ -1,7 +1,7 @@
 import api from './api';
 
 export const UserService = {
-    getUsers:()=>{
+    getAllUsers:()=>{
         return api.get("/users");
     },
 

@@ -16,7 +16,7 @@ export const TeamDetails = () => {
 
   const fetchEmp = useCallback(async () => {
     try {
-      const response = await UserService.getUsers();
+      const response = await UserService.getAllUsers();
       updateState({ team: response.data });
     } catch (error) {
       console.log("Fetch Error", error);
