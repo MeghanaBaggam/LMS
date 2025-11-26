@@ -38,3 +38,6 @@ const employeeSlice=createSlice({
     }
 
 });
+
+export const {addEmployee,updateEmployee,deleteEmployee}=employeeSlice.actions;
+export default employeeSlice.reducer;
