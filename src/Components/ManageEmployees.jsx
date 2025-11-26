@@ -2,12 +2,13 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { UserService } from "../Services/UserService";
 import { AgGridReact } from "ag-grid-react";
 import { fetchEmp } from "../store/EmployeeSlice";
+import { useDispatch, useSelector } from "react-redux";
 import {
   ModuleRegistry,
   AllCommunityModule,
   themeQuartz,
 } from "ag-grid-community";
-import { useDispatch, useSelector } from "react-redux";
+
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 const initialFormState = {
@@ -18,10 +19,8 @@ const initialFormState = {
   managerId: "",
 };
 export const ManageEmployees = () => {
- const dispatch=useDispatch();
- const employees=useSelector((state)=>state.employees.list);
- const loading=useSelector((state)=>state.employees.loading);
- const error=useSelector((state)=>state.employees.error);
+  const dispatch = useDispatch();
+  const employees = useSelector((state) => state.employees.list);
   const [state, setState] = useState({
     search: "",
     roleFilter: "",
@@ -38,7 +37,7 @@ export const ManageEmployees = () => {
     const { name, value } = e.target;
     updateState({ formData: { ...state.formData, [name]: value } });
   });
-//fetch employees from the redux  
+  //fetch employees from the redux
   useEffect(() => {
     dispatch(fetchEmp());
   }, [dispatch]);
@@ -53,7 +52,7 @@ export const ManageEmployees = () => {
         manager_id: state.formData.managerId,
       });
       dispatch(fetchEmp());
-      updateState({ showAdd: false,formData: initialFormState });
+      updateState({ showAdd: false, formData: initialFormState });
     } catch (error) {
       console.log("Add Error", error);
     }
@@ -68,7 +67,11 @@ export const ManageEmployees = () => {
         manager_id: state.formData.managerId,
       });
       dispatch(fetchEmp());
-      updateState({ showEdit: false,formData: initialFormState ,editId: null });
+      updateState({
+        showEdit: false,
+        formData: initialFormState,
+        editId: null,
+      });
     } catch (error) {
       console.log("Update Error:", error);
     }
@@ -89,17 +92,17 @@ export const ManageEmployees = () => {
   );
 
   const handleEditClick = useCallback((data) => {
-    updateState({ 
-    showEdit: true,
-    editId: data.id,
-    formData: {
+    updateState({
+      showEdit: true,
+      editId: data.id,
+      formData: {
         name: data.name,
         email: data.email,
         password: "",
         role: data.role,
         managerId: data.manager_id || "",
       },
-   });
+    });
   }, []);
 
   const columns = useMemo(

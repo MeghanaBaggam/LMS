@@ -1,10 +1,13 @@
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { FaUserCircle } from "react-icons/fa";
-import { UserService } from "../Services/UserService";
+import { fetchEmp } from "../store/EmployeeSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 export const TeamDetails = () => {
+  const dispatch = useDispatch();
+  const employees = useSelector((state) => state.employees.list);
+
   const [state, setState] = useState({
-    team: [],
     search: "",
     roleFilter: "",
     selectedManager: null,
@@ -14,20 +17,12 @@ export const TeamDetails = () => {
     setState((prev) => ({ ...prev, ...updates }));
   }, []);
 
-  const fetchEmp = useCallback(async () => {
-    try {
-      const response = await UserService.getAllUsers();
-      updateState({ team: response.data });
-    } catch (error) {
-      console.log("Fetch Error", error);
-    }
-  }, [updateState]);
   useEffect(() => {
     fetchEmp();
-  }, [fetchEmp]);
+  }, [dispatch]);
 
   const filterdTeam = useMemo(() => {
-    return state.team
+    return employees
       .filter((emp) =>
         emp.name.toLowerCase().includes(state.search.toLowerCase())
       )
@@ -40,7 +35,8 @@ export const TeamDetails = () => {
     return state.selectedManager
       ? state.team.filter((emp) => emp.manager_id === state.selectedManager.id)
       : filterdTeam;
-  }, [state.selectedManager, state.team, filterdTeam]);
+  }, [state.selectedManager, employees, filterdTeam]);
+
   return (
     <div className="team-details-container">
       <div className="team-header-row">
@@ -67,8 +63,8 @@ export const TeamDetails = () => {
           <select
             className="role-select"
             onChange={(e) => {
-              updateState({ roleFilter: e.target.value });
-              updateState({ selectedManager: null });
+              updateState({ roleFilter: e.target.value,selectedManager: null });
+  
             }}
           >
             <option value="">All Roles</option>
